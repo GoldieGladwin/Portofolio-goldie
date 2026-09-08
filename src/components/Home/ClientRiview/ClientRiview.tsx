@@ -27,7 +27,7 @@ const responsive = {
 };
 
   return (
-    <div className='py-30 bg-gray-100 dark:bg-gray-900'>
+    <div id='testimonials' className='py-30 bg-gray-100 dark:bg-gray-900 scroll-mt-24'>
         <div className='w-[80%] mx-auto'>
             <SectionHeading title_1='Client' title_2='Review' description='Chek our client riview'
             />

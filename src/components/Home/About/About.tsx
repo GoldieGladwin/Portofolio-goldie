@@ -6,7 +6,7 @@ import Lanyard from '@/components/lanyard/Lanyard'
 
 const About = () => {
   return (
-    <div className="py-16 bg-gray-100 dark:bg-gray-900">
+    <div id="about" className="py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24">
       {/* section heading */}
       <SectionHeading 
         title_1="About" 
@@ -35,7 +35,7 @@ const About = () => {
   </h3>
 
   <p className="text-muted-foreground leading-relaxed">
-    I&apos;m Goldie, A passionate student and aspiring web developer who
+    I&apos;m Goldie Gladwin Rajaborn Arivianto, A passionate student and aspiring web developer who
     loves creating modern, interactive, and meaningful digital experiences.
   </p>
 

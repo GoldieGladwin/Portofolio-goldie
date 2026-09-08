@@ -8,7 +8,7 @@ import { Send } from 'lucide-react'
 
 const Contact = () => {
   return (
-    <div className='py-16 bg-gray-100 dark:bg-gray-600'>
+    <div id='contact' className='py-16 bg-gray-100 dark:bg-gray-600 scroll-mt-24'>
         <SectionHeading title_1='Get In' title_2='Touch' description='Have a Project in mind or just want to say hi? i will love to hear from you.'
         />
         <div className='w-[80%] mx-auto'>

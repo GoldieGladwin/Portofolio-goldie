@@ -52,8 +52,8 @@ export const skillCategories = [
       { name: "Next.js", icon: Globe },
       { name: "TypeScript", icon: Terminal },
       { name: "Tailwind CSS", icon: Palette },
-      { name: "React Native", icon: Smartphone },
-      { name: "Vue.js", icon: Layout },
+      
+      
     ],
   },
 
@@ -61,10 +61,10 @@ export const skillCategories = [
     title: "Backend",
     skills: [
       { name: "Node.js", icon: Server },
-      { name: "Express.js", icon: Server },
+      
       { name: "REST API", icon: Globe },
       { name: "MySQL", icon: Database },
-      { name: "MongoDB", icon: Database },
+      
     ],
   },
 

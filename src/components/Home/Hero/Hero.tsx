@@ -9,7 +9,7 @@ import { Download, FolderOpen } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-mt-24">
       <Background />
 
       {/* content */}

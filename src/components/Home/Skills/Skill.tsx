@@ -9,7 +9,7 @@ const Skill = () => {
 
   return (
 
-    <div className="py-16 bg-gray-100 dark:bg-gray-950">
+    <div id="skills" className="py-16 bg-gray-100 dark:bg-gray-950 scroll-mt-24">
 
         <SectionHeading 
 

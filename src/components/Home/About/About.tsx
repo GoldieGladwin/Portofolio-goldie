@@ -1,6 +1,5 @@
 import SectionHeading from '@/components/helper/SectionHeading'
 import React from 'react'
-import Image from 'next/image'
 import { highlights, stats } from '../../../../data'
 import Lanyard from '@/components/lanyard/Lanyard'
 
@@ -13,10 +12,10 @@ const About = () => {
         title_2="Me" 
         description="Get to know me better and my journey as a developer." 
       />
-      <div className="grid w-[80%] mx-auto lg:grid-cols-2 gap-12 items-center">
+      <div className="grid w-[90%] max-w-6xl mx-auto grid-cols-1 lg:grid-cols-2 gap-12 items-center">
    {/* Image */}
-<div data-aos="fade-right" date-aos-delay="0" date-aos-anchor-placement="top-center" className="relative w-full max-w-[600px] aspect-square">
-  <div className="aspect-square rounded-2xl overflow-hidden p-2">
+<div data-aos="fade-right" date-aos-delay="0" date-aos-anchor-placement="top-center" className="relative w-full max-w-[600px] h-[380px] sm:h-auto sm:aspect-square mx-auto">
+  <div className="h-full w-full rounded-2xl p-2 overflow-visible">
     <Lanyard
   position={[0, 0, 7]}
   gravity={[0, -40, 0]}
@@ -29,8 +28,8 @@ const About = () => {
 </div>
 
 {/* content */}
-<div data-aos="fade-left" date-aos-delay="150" date-aos-anchor-placement="top-center" className="space-y-6 flex-1 min-w-0 lg:-translate-y-8">
-  <h3 className="text-2xl font-semibold">
+<div data-aos="fade-left" date-aos-delay="150" date-aos-anchor-placement="top-center" className="space-y-6 flex-1 min-w-0 break-words lg:-translate-y-8">
+  <h3 className="text-2xl font-semibold break-words">
     A passionate developer who love to create projects
   </h3>
 
@@ -70,7 +69,7 @@ const About = () => {
   </div>
       </div>
       {/* stats */}
-      <div data-aos="zoom-in" date-aos-delay="300" date-aos-anchor-placement="top-center" className="mt-16 w-[80%] mx-auto">
+      <div data-aos="zoom-in" date-aos-delay="300" date-aos-anchor-placement="top-center" className="mt-16 w-[90%] max-w-6xl mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat)=>{
             return(

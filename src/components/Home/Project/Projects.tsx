@@ -2,22 +2,45 @@ import SectionHeading from '@/components/helper/SectionHeading'
 import React from 'react'
 import { projects } from '@/data'
 import ProjectCard from './projectcard'
+import Link from 'next/link'
+import { Filter, Sparkles } from 'lucide-react'
 
 const Projects = () => {
   return (
     <div 
-    data-aos="fade-up" data-aos-delay="400" data-aos-anchor-placement="top-center" 
-    id='projects'
-    className='py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24'>
-        <SectionHeading title_1='Featured' title_2='Projects' description='A selection of my recent works and technical projects.' />
-        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-[80%] mx-auto'>
-            {projects.map((project,index)=>{
-            return    <div key={index}>
-                <ProjectCard {...project} />
+      data-aos="fade-up" data-aos-delay="400" data-aos-anchor-placement="top-center" 
+      id='projects'
+      className='py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24'
+    >
+      <SectionHeading title_1='Featured' title_2='Projects' description='A selection of my recent works and technical projects.' />
+      <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-[80%] mx-auto'>
+        {projects.map((project, index) => {
+          return (
+            <div key={index}>
+              <ProjectCard {...project} />
             </div>
-            })}
-        </div>
-        </div>
+          )
+        })}
+      </div>
+
+      {/* Navigation to searchParams Catalog & Full Showcase */}
+      <div className='mt-12 flex flex-wrap items-center justify-center gap-4 w-[90%] sm:w-[80%] mx-auto'>
+        <Link
+          href="/project"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold shadow-md transition-all duration-200 hover:scale-105"
+        >
+          <Filter className="w-4 h-4" />
+          Katalog Proyek (Filter searchParams)
+        </Link>
+        <Link
+          href="/projects/detailproject"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 text-xs sm:text-sm font-semibold shadow-sm hover:shadow transition-all duration-200 hover:scale-105"
+        >
+          <Sparkles className="w-4 h-4 text-indigo-500" />
+          Lihat Seluruh Showcase Proyek
+        </Link>
+      </div>
+    </div>
   )
 }
 

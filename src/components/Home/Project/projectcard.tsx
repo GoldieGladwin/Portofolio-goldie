@@ -66,7 +66,7 @@ const ProjectCard = ({
         {/* buttons */}
 <div className="flex flex-wrap gap-3">
   <Link
-    href="/projects/detailproject"
+    href={`/project/${slug}`}
     className={cn(buttonVariants({ variant: 'default' }), 'flex-1')}
   >
     View Details

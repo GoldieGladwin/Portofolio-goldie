@@ -2,7 +2,7 @@ import SectionHeading from '@/components/helper/SectionHeading'
 
 import React from 'react'
 
-import { skillCategories } from '../../../../data'
+import { skillCategories } from '@/data'
 import Skillcard from './Skillcard'
 
 const Skill = () => {
@@ -42,7 +42,7 @@ const Skill = () => {
                             {category.skills.map((skill, index) => {
 
                                 return <div 
-                                data-aos="zoom-in" date-aos-delay={index * 100} date-aos-anchor-placement="top-center" key={index}>
+                                data-aos="zoom-in" data-aos-delay={index * 100} data-aos-anchor-placement="top-center" key={index}>
                                     <Skillcard name={skill.name} icon={skill.icon}/>
                                 </div>
 

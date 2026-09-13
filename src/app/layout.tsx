@@ -5,6 +5,7 @@ import Provider from "@/components/hoc/Provider";
 import ResponsiveNav from "@/components/Home/Navbar/ResponsiveNav";
 import Footer from "@/components/Home/Footer/Footer";
 import ScrollToTop from "@/components/helper/ScrollToTop";
+import AosInitializer from "@/components/helper/AosInitializer";
 
 const font = Inter({
   weight: ["100", "200","300","400","500","600","700","800","900"],
@@ -12,17 +13,18 @@ const font = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Goldie DevPortofolio",
-  description: "Portofolio Website using next js ",
+  title: "Goldie Gladwin | Portfolio",
+  description: "Personal portfolio website of Goldie Gladwin - Full Stack Developer & Software Engineering Student.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en" suppressHydrationWarning
+      lang="en" className="scroll-smooth" suppressHydrationWarning
     >
       <body className={`min-h-full flex flex-col ${font.className}`}>
         <Provider>
+          <AosInitializer />
           <ResponsiveNav/>
         {children}
         <Footer/>

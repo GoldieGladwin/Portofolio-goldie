@@ -1,15 +1,15 @@
 import SectionHeading from '@/components/helper/SectionHeading'
 import React from 'react'
-import { experiences } from '../../../../data'
+import { experiences } from '@/data'
 import { Briefcase, GraduationCap } from 'lucide-react'
 
 const Experience = () => {
   return (
     <div id='experience' className='py-16 bg-gray-100 dark:bg-gray-950 scroll-mt-24'>
       <SectionHeading
-        title_1='Experience'
-        title_2='Edication'
-        description='My profesional Journey and academic background'
+        title_1='Experience &'
+        title_2='Education'
+        description='My professional journey and academic background.'
       />
 
       <div className='relative px-6 max-w-4xl mx-auto'>
@@ -20,7 +20,7 @@ const Experience = () => {
         {experiences.map((item, index) => {
           return (
             <div
-            data-aos="zoom-in" date-aos-delay={index * 100} date-aos-anchor-placement="top-center" 
+            data-aos="zoom-in" data-aos-delay={index * 100} data-aos-anchor-placement="top-center" 
               key={index}
               className={`relative flex flex-col md:flex-row gap-8 mb-12 ${
                 index % 2 === 0 ? 'md:flex-row-reverse' : ''

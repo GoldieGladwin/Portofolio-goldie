@@ -1,11 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { ExternalLink } from 'lucide-react'
-import { SiGithubactions } from 'react-icons/si'
 import { FaGithub } from 'react-icons/fa6'
 
 type Props = {
+  slug: string
   title: string
   description: string
   image: string
@@ -15,6 +17,7 @@ type Props = {
 }
 
 const ProjectCard = ({
+  slug,
   title,
   description,
   image,
@@ -61,32 +64,38 @@ const ProjectCard = ({
         </div>
 
         {/* buttons */}
-<div className="flex gap-3">
+<div className="flex flex-wrap gap-3">
+  <Link
+    href="/projects/detailproject"
+    className={cn(buttonVariants({ variant: 'default' }), 'flex-1')}
+  >
+    View Details
+  </Link>
   {demoUrl && (
-    <Button className="flex-1 p-0">
+    <div className="flex-1">
       <a
         href={demoUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full h-full flex items-center justify-center"
+        className={cn(buttonVariants({ variant: 'default' }), 'w-full')}
       >
         <ExternalLink className="w-4 h-4 mr-2" />
-        live demo
+        Live Demo
       </a>
-    </Button>
+    </div>
   )}
   {githubUrl && (
-    <Button variant={'outline'} className="flex-1 p-0">
+    <div className="flex-1">
       <a
         href={githubUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full h-full flex items-center justify-center"
+        className={cn(buttonVariants({ variant: 'outline' }), 'w-full')}
       >
         <FaGithub className="w-4 h-4 mr-2" />
-        Github 
+        GitHub
       </a>
-    </Button>
+    </div>
   )}
 </div>
       </div>

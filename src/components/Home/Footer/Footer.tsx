@@ -1,5 +1,5 @@
 import React from 'react'
-import { footerSocialLinks } from '../../../../data'
+import { aboutMe, footerSocialLinks } from '@/data'
 import { Moon } from 'lucide-react'
 
 const Footer = () => {
@@ -16,12 +16,12 @@ const Footer = () => {
                     </a>
                 })}
             </div>
-            <p className='text-sm text-muted-foreground flex itmes-center fap-1'>
-                Made With {""} {""} <Moon className='w-4 h-4 text-destructive full-destructive'/> by Goldie Gladwin
+            <p className='text-sm text-muted-foreground flex items-center gap-1'>
+                Made With <Moon className='w-4 h-4 text-destructive fill-destructive inline mx-1'/> by {aboutMe.name || "Goldie Gladwin"}
             </p>
         </div>
         <div className='mt-8 pt-8 border-t border-gray-300 dark:border-gray-800 text-center'>
-            <p className='text-sm text-muted-foreground'>© {new Date().getFullYear()} all rights reserved</p>
+            <p className='text-sm text-muted-foreground'>© {new Date().getFullYear()} All rights reserved.</p>
         </div>
     </div>
   </footer>

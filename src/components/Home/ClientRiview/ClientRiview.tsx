@@ -3,7 +3,7 @@ import SectionHeading from '@/components/helper/SectionHeading'
 import React from 'react'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { userReviewData } from '../../../../data';
+import { userReviewData } from '@/data';
 import RiviewCard from './RiviewCard';
 
 const ClientRiview = () => {
@@ -29,7 +29,7 @@ const responsive = {
   return (
     <div id='testimonials' className='py-30 bg-gray-100 dark:bg-gray-900 scroll-mt-24'>
         <div className='w-[80%] mx-auto'>
-            <SectionHeading title_1='Client' title_2='Review' description='Chek our client riview'
+            <SectionHeading title_1='Client' title_2='Reviews' description='What my clients say about working with me.'
             />
             <div className='mt-14'>
 <Carousel

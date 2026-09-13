@@ -15,7 +15,7 @@ type AboutProps = {
 
 const About = ({ showDetailLink = true }: AboutProps) => {
   return (
-    <div id="about" className="py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24">
+    <div id="about" className="py-8 sm:py-12 md:py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24">
       {/* section heading */}
       <div data-aos="fade-down" data-aos-duration="800">
         <SectionHeading 
@@ -24,9 +24,9 @@ const About = ({ showDetailLink = true }: AboutProps) => {
           description="Get to know me better and my journey as a developer." 
         />
       </div>
-      <div className="grid w-[90%] max-w-6xl mx-auto grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="grid w-[94%] sm:w-[90%] max-w-6xl mx-auto grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
    {/* Image */}
-<div data-aos="fade-right" data-aos-duration="900" data-aos-anchor-placement="top-bottom" className="relative w-full max-w-[600px] h-[380px] sm:h-auto sm:aspect-square mx-auto">
+<div data-aos="fade-right" data-aos-duration="900" data-aos-anchor-placement="top-bottom" className="relative w-full max-w-[500px] lg:max-w-[600px] h-[260px] sm:h-[360px] md:h-[400px] lg:h-auto lg:aspect-square mx-auto">
   <div className="h-full w-full rounded-2xl p-2 overflow-visible">
     <Lanyard
   position={[0, 0, 7]}
@@ -40,23 +40,23 @@ const About = ({ showDetailLink = true }: AboutProps) => {
 </div>
 
 {/* content */}
-<div data-aos="fade-left" data-aos-duration="900" data-aos-delay="200" data-aos-anchor-placement="top-bottom" className="space-y-6 flex-1 min-w-0 break-words lg:-translate-y-8">
-  <h3 className="text-2xl font-semibold break-words">
+<div data-aos="fade-left" data-aos-duration="900" data-aos-delay="200" data-aos-anchor-placement="top-bottom" className="space-y-4 sm:space-y-6 flex-1 min-w-0 break-words lg:-translate-y-6">
+  <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold break-words">
     {aboutMe.role || "A passionate developer who love to create projects"}
   </h3>
 
-  <p className="text-muted-foreground leading-relaxed">
+  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
     {aboutMe.description}
   </p>
 
   {aboutMe.quote && (
-    <blockquote className="border-l-4 border-indigo-600 dark:border-indigo-400 pl-4 italic text-sm text-muted-foreground dark:text-gray-300">
+    <blockquote className="border-l-4 border-indigo-600 dark:border-indigo-400 pl-3 sm:pl-4 italic text-xs sm:text-sm text-muted-foreground dark:text-gray-300">
       &ldquo;{aboutMe.quote}&rdquo;
     </blockquote>
   )}
 
     {/* highlights */}
-   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-2 sm:pt-4">
   {highlights.map((item, index) => {
     return (
       <div
@@ -64,13 +64,13 @@ const About = ({ showDetailLink = true }: AboutProps) => {
         data-aos="fade-up"
         data-aos-delay={300 + index * 100}
         data-aos-anchor-placement="top-bottom"
-        className="flex items-center gap-3 text-sm"
+        className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm"
       >
-        <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-          <item.icon className="w-4 h-4 text-blue-500" />
+        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-100 dark:bg-blue-950/60 flex items-center justify-center shrink-0">
+          <item.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
         </div>
 
-        <span className="text-muted-foreground">
+        <span className="text-muted-foreground break-words">
           {item.text}
         </span>
       </div>
@@ -78,14 +78,14 @@ const About = ({ showDetailLink = true }: AboutProps) => {
   })}
 </div>
 
-  <div data-aos="fade-up" data-aos-delay="500" className="flex flex-wrap items-center gap-4 pt-2">
+  <div data-aos="fade-up" data-aos-delay="500" className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
     {showDetailLink && (
       <Link
         href="/about/detail-about"
-        className={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'w-fit')}
+        className={cn(buttonVariants({ variant: 'default', size: 'default' }), 'w-fit text-xs sm:text-sm')}
       >
         More About Me
-        <ArrowRight />
+        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
       </Link>
     )}
     <CounterApresiasi />
@@ -94,8 +94,8 @@ const About = ({ showDetailLink = true }: AboutProps) => {
   </div>
       </div>
       {/* stats */}
-      <div className="mt-16 w-[90%] max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="mt-10 sm:mt-14 md:mt-16 w-[94%] sm:w-[90%] max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
           {stats.map((stat, index)=>{
             return(
               <div 
@@ -103,13 +103,12 @@ const About = ({ showDetailLink = true }: AboutProps) => {
                 data-aos="zoom-in-up" 
                 data-aos-delay={index * 120} 
                 data-aos-anchor-placement="top-bottom"
-                className="bg-white dark:bg-gray-800 shadow rounded-xl p-6 text-center hover:scale-105 transition-transform duration-300"
+                className="bg-white dark:bg-gray-800 shadow rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-6 text-center hover:scale-105 transition-transform duration-300"
               >
-                <div className="text-xl md:text-4xl font-bold text-purple-600">
+                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-purple-600 dark:text-purple-400">
                   {stat.value}
-
                 </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-[11px] sm:text-xs md:text-sm text-muted-foreground mt-0.5 sm:mt-1 font-medium">{stat.label}</div>
               </div>
             )
           })}

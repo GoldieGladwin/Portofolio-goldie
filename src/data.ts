@@ -1,21 +1,15 @@
 import {
   Briefcase,
+  Code2,
   Coffee,
+  Database,
+  Globe,
   GraduationCap,
   Mail,
   MapPin,
-  Phone,
-  Terminal,
-} from "lucide-react"
-
-import {
-  Code2,
-  Database,
-  Globe,
-  Layout,
   Palette,
   Server,
-  Smartphone,
+  Terminal,
 } from "lucide-react"
 import {
   FaDiscord,
@@ -278,8 +272,6 @@ export const projects = [
   },
 ]
 
-export const daftarProyek = projects;
-export type ProyekItem = (typeof projects)[number];
 
 export const userReviewData = [
   {
@@ -337,14 +329,6 @@ export const contactInfo = [
   },
 ]
 
-export const education = [
-  {
-    school: "SMKN 1 Pasuruan",
-    major: "Software Engineering (RPL)",
-    startYear: "2025",
-    endYear: "Present",
-  },
-]
 
 export const aboutMe = {
   name: "Goldie Gladwin",

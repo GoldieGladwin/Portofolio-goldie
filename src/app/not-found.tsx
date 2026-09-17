@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, FolderOpen, Home } from 'lucide-react';
+import { FolderOpen, Home } from 'lucide-react';
 
 export default function NotFound() {
   return (

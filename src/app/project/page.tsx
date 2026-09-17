@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { projects } from '@/data';
+import { projects as fallbackProjects } from '@/data';
 import { ArrowLeft, Filter, Sparkles } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
-// Standar Modul Pertemuan 02: Halaman Katalog Proyek dengan Filter searchParams
+// Standar Modul Pertemuan 02 & 03: Halaman Katalog Proyek Terintegrasi Supabase
 interface ProjectPageProps {
   searchParams: Promise<{ category?: string }>;
 }
@@ -11,15 +12,37 @@ interface ProjectPageProps {
 export default async function ProjectCatalogPage({ searchParams }: ProjectPageProps) {
   const { category } = await searchParams;
 
+  // Ambil data proyek langsung dari Supabase
+  const { data: dbProjects } = await supabase
+    .from('proyek')
+    .select('*')
+    .order('id', { ascending: true });
+
+  const activeProjects = (dbProjects && dbProjects.length > 0)
+    ? dbProjects.map((item) => ({
+        id: String(item.id),
+        slug: String(item.id),
+        title: item.judul,
+        category: item.kategori || 'Web',
+        kategori: item.kategori || 'Web',
+        description: item.deskripsi,
+        image: item.image || '/images/managemens.png',
+        techStack: typeof item.teknologi === 'string'
+          ? item.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
+          : [],
+        githubUrl: item.link || '',
+      }))
+    : fallbackProjects;
+
   const categories = ['Semua', 'Web', 'Mobile', 'IoT'];
 
   const filtered = category && category.toLowerCase() !== 'semua'
-    ? projects.filter(
+    ? activeProjects.filter(
         (p) =>
           p.kategori?.toLowerCase() === category.toLowerCase() ||
           p.category?.toLowerCase().includes(category.toLowerCase())
       )
-    : projects;
+    : activeProjects;
 
   return (
     <main className="min-h-screen bg-gray-100 px-4 pt-36 pb-24 dark:bg-gray-900 sm:px-6 sm:pt-44 lg:px-8">
@@ -117,7 +140,7 @@ export default async function ProjectCatalogPage({ searchParams }: ProjectPagePr
 
               <div className="mt-6 pt-4 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between">
                 <div className="flex flex-wrap gap-1">
-                  {item.techStack.slice(0, 2).map((t) => (
+                  {item.techStack.slice(0, 2).map((t: string) => (
                     <span
                       key={t}
                       className="text-[11px] bg-slate-100 dark:bg-gray-700 text-slate-600 dark:text-gray-300 px-2 py-0.5 rounded-md"

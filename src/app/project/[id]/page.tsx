@@ -7,6 +7,7 @@ import { FaGithub } from 'react-icons/fa6';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Metadata } from 'next';
+import { supabase } from '@/lib/supabase';
 
 // Dynamic Route: app/project/[id]/page.tsx
 interface ProjectDetailPageProps {
@@ -15,7 +16,21 @@ interface ProjectDetailPageProps {
 
 export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const project = projects.find((p) => p.id === id || p.slug === id);
+  let project = projects.find((p) => p.id === id || p.slug === id);
+
+  if (!project && !isNaN(Number(id))) {
+    const { data: dbItem } = await supabase
+      .from('proyek')
+      .select('*')
+      .eq('id', Number(id))
+      .maybeSingle();
+    if (dbItem) {
+      return {
+        title: `${dbItem.judul} | Detail Project`,
+        description: dbItem.deskripsi,
+      };
+    }
+  }
 
   if (!project) {
     return {
@@ -33,8 +48,44 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   // Await params as required by Next.js 15+
   const { id } = await params;
 
-  // Mencari proyek berdasarkan ID atau slug
-  const project = projects.find((p) => p.id === id || p.slug === id);
+  // Mencari proyek dari Supabase jika numeric ID
+  let project: any = null;
+  if (!isNaN(Number(id))) {
+    const { data: dbItem } = await supabase
+      .from('proyek')
+      .select('*')
+      .eq('id', Number(id))
+      .maybeSingle();
+
+    if (dbItem) {
+      project = {
+        id: String(dbItem.id),
+        slug: String(dbItem.id),
+        title: dbItem.judul,
+        category: dbItem.kategori || 'Web',
+        kategori: dbItem.kategori || 'Web',
+        role: dbItem.role || 'Full Stack Developer',
+        description: dbItem.deskripsi,
+        longDescription: dbItem.deskripsi,
+        keyFeatures: [
+          'Tersimpan secara realtime di Supabase PostgreSQL cloud database',
+          'Row Level Security (RLS) terproteksi dengan policy akses baca publik',
+          'Terintegrasi dengan Next.js Server Component modern',
+        ],
+        image: dbItem.image || '/images/managemens.png',
+        techStack: typeof dbItem.teknologi === 'string'
+          ? dbItem.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
+          : [],
+        githubUrl: dbItem.link || '',
+        demoUrl: '',
+      };
+    }
+  }
+
+  // Fallback ke data lokal jika tidak ditemukan di Supabase
+  if (!project) {
+    project = projects.find((p) => p.id === id || p.slug === id);
+  }
 
   if (!project) {
     notFound();
@@ -110,7 +161,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 Fitur Unggulan (Key Features):
               </h3>
               <ul className="grid gap-2.5 pt-1">
-                {project.keyFeatures.map((f, i) => (
+                {project.keyFeatures.map((f: string, i: number) => (
                   <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 dark:text-gray-300">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                     <span>{f}</span>
@@ -126,7 +177,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               Teknologi yang Digunakan (Tech Stack):
             </h3>
             <div className="flex flex-wrap gap-2 pt-1">
-              {project.techStack.map((t) => (
+              {project.techStack.map((t: string) => (
                 <span
                   key={t}
                   className="rounded-md bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-gray-700 dark:text-gray-200"

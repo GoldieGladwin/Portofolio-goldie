@@ -2,14 +2,29 @@
 
 import SectionHeading from '@/components/helper/SectionHeading'
 import React, { useEffect, useState } from 'react'
-import { projects as fallbackProjects } from '@/data'
 import ProjectCard from './projectcard'
 import Link from 'next/link'
-import { Database, Filter, Sparkles } from 'lucide-react'
+import { Filter, Layers, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
+interface ProjectItem {
+  id: string
+  slug: string
+  title: string
+  category: string
+  kategori: string
+  role: string
+  description: string
+  longDescription: string
+  keyFeatures: string[]
+  image: string
+  techStack: string[]
+  githubUrl: string
+  demoUrl: string
+}
+
 const Projects = () => {
-  const [projectList, setProjectList] = useState(fallbackProjects)
+  const [projectList, setProjectList] = useState<ProjectItem[]>([])
 
   useEffect(() => {
     async function fetchSupabaseProjects() {
@@ -56,7 +71,7 @@ const Projects = () => {
         {projectList.map((project, index) => {
           return (
             <div 
-              key={index}
+              key={project.id || index}
               data-aos="fade-up"
               data-aos-delay={Math.min(index * 70, 200)}
               data-aos-anchor-placement="top-bottom"
@@ -67,28 +82,14 @@ const Projects = () => {
         })}
       </div>
 
-      {/* Navigation to searchParams Catalog, Supabase /proyek, & Full Showcase */}
-      <div className='mt-12 flex flex-wrap items-center justify-center gap-4 w-[90%] sm:w-[80%] mx-auto'>
-        <Link
-          href="/proyek"
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-md transition-all duration-200 hover:scale-105"
-        >
-          <Database className="w-4 h-4" />
-          Halaman /proyek (Modul Supabase)
-        </Link>
+      {/* Tombol Lihat Semua Proyek */}
+      <div className='mt-12 flex items-center justify-center w-[90%] sm:w-[80%] mx-auto'>
         <Link
           href="/project"
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold shadow-md transition-all duration-200 hover:scale-105"
+          className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
         >
           <Filter className="w-4 h-4" />
-          Katalog Proyek (Filter searchParams)
-        </Link>
-        <Link
-          href="/projects/detailproject"
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 text-xs sm:text-sm font-semibold shadow-sm hover:shadow transition-all duration-200 hover:scale-105"
-        >
-          <Sparkles className="w-4 h-4 text-indigo-500" />
-          Lihat Seluruh Showcase Proyek
+          Lihat Semua Proyek & Filter
         </Link>
       </div>
     </div>

@@ -37,15 +37,15 @@ export default async function ProyekPage() {
           </Link>
 
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/70 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-950/40 dark:text-emerald-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200/60 bg-indigo-50/70 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-700 dark:border-indigo-500/30 dark:bg-indigo-950/40 dark:text-indigo-300">
               <Sparkles className="h-3.5 w-3.5" />
-              Live Supabase Cloud Database
+              Showcase Karya Siswa
             </div>
             <h1 className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
               Daftar Karya & Proyek Siswa
             </h1>
             <p className="mt-2 text-sm text-slate-600 dark:text-gray-300">
-              Data berikut diambil langsung secara realtime dari tabel <code className="font-mono bg-slate-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-indigo-600 dark:text-indigo-400">proyek</code> di Supabase PostgreSQL.
+              Koleksi karya dan proyek pengembangan web serta aplikasi yang telah saya bangun.
             </p>
           </div>
         </div>
@@ -131,14 +131,14 @@ export default async function ProyekPage() {
           })}
         </div>
 
-        {/* Tantangan Opsional Modul: Penanganan kondisi data kosong */}
+        {/* Kondisi data kosong */}
         {daftarProyek && daftarProyek.length === 0 && (
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700">
             <p className="text-base font-semibold text-slate-700 dark:text-gray-200">
-              Belum ada data proyek di database Supabase.
+              Belum ada data proyek yang ditampilkan.
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Tambahkan baris baru melalui Supabase Table Editor untuk melihatnya muncul di sini.
+              Proyek baru akan segera ditambahkan di sini.
             </p>
           </div>
         )}

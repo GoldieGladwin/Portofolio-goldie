@@ -68,9 +68,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         description: dbItem.deskripsi,
         longDescription: dbItem.deskripsi,
         keyFeatures: [
-          'Tersimpan secara realtime di Supabase PostgreSQL cloud database',
-          'Row Level Security (RLS) terproteksi dengan policy akses baca publik',
-          'Terintegrasi dengan Next.js Server Component modern',
+          'Arsitektur responsif dan modern dengan performa optimal',
+          'Navigasi antarmuka intuitif dan ramah pengguna',
+          'Terintegrasi dengan komponen Next.js modern',
         ],
         image: dbItem.image || '/images/managemens.png',
         techStack: typeof dbItem.teknologi === 'string'

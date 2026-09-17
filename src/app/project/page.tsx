@@ -60,13 +60,13 @@ export default async function ProjectCatalogPage({ searchParams }: ProjectPagePr
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200/60 bg-indigo-50/70 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-700 dark:border-indigo-500/30 dark:bg-indigo-950/40 dark:text-indigo-300">
               <Sparkles className="h-3.5 w-3.5" />
-              Dynamic searchParams Filter
+              Katalog Portofolio
             </div>
             <h1 className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
               Daftar Karya & Proyek Siswa
             </h1>
             <p className="mt-2 text-sm text-slate-600 dark:text-gray-300">
-              Pilih kategori di bawah untuk menyaring portofolio karya kejuruan (URL query `?category=`):
+              Pilih kategori di bawah untuk menyaring karya dan proyek:
             </p>
           </div>
         </div>

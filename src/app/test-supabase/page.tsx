@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, AlertTriangle, Database } from 'lucide-react';
 
 export default async function TestSupabasePage() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dznrxxcvvovcuaokyrbh.supabase.co';
   const isUrlConfigured = supabaseUrl && !supabaseUrl.includes('your-project-id');
 
   let data = null;

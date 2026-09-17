@@ -24,7 +24,7 @@ const Hero = () => {
         </div>
 
         {/* title */}
-        <h1 data-aos="fade-up" data-aos-delay="100" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+        <h1 data-aos="fade-up" data-aos-delay="50" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
           Hi, I&apos;m{' '}
           <span className="text-indigo-800 dark:text-yellow-300">
             {aboutMe.nickname || aboutMe.name || "Goldie"}
@@ -32,7 +32,7 @@ const Hero = () => {
         </h1>
 
         {/* typewrite effects */}
-        <div data-aos="fade-up" data-aos-delay="200" className="text-xl sm:text-2xl md:text-3xl text-black dark:text-white font-semibold mb-4 sm:mb-8 h-12">
+        <div data-aos="fade-up" data-aos-delay="100" className="text-xl sm:text-2xl md:text-3xl text-black dark:text-white font-semibold mb-4 sm:mb-8 h-12">
           <TypeAnimation
             sequence={[
               "Full Stack Developer",
@@ -50,7 +50,7 @@ const Hero = () => {
         </div>
 
         {/* description */}
-        <p data-aos="fade-up" data-aos-delay="300" className="text-lg text-muted-foreground dark:text-gray-200 max-w-2xl mx-auto mb-10">
+        <p data-aos="fade-up" data-aos-delay="150" className="text-lg text-muted-foreground dark:text-gray-200 max-w-2xl mx-auto mb-10">
           Building modern digital experiences with creative solutions and modern technologies.
           Passionate about developing applications, solving technical challenges, and continuously learning.
         </p>
@@ -58,7 +58,7 @@ const Hero = () => {
         {/* button */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="#projects">
-            <Button data-aos="fade-up" data-aos-delay="400" size="lg" className="w-fit mx-auto sm:mx-0">
+            <Button data-aos="fade-up" data-aos-delay="200" size="lg" className="w-fit mx-auto sm:mx-0">
               <FolderOpen className="w-5 h-5 mr-2" />
               View Projects
             </Button>
@@ -70,7 +70,7 @@ const Hero = () => {
             target="_blank" 
             rel="noopener noreferrer"
           >
-            <Button data-aos="fade-up" data-aos-delay="400" size="lg" className="w-fit mx-auto sm:mx-0">
+            <Button data-aos="fade-up" data-aos-delay="200" size="lg" className="w-fit mx-auto sm:mx-0">
               <Download className="w-5 h-5 mr-2" />
               Download CV
             </Button>

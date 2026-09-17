@@ -153,7 +153,7 @@ export default function DetailProjectPage() {
                     {/* Image Column */}
                     <div
                       data-aos={imageOnLeft ? 'fade-right' : 'fade-left'}
-                      data-aos-duration="900"
+                      data-aos-duration="650"
                       data-aos-anchor-placement="top-bottom"
                       className={cn(
                         'group relative overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200 shadow-md dark:border-gray-700 lg:col-span-6',
@@ -180,8 +180,8 @@ export default function DetailProjectPage() {
                     {/* Content Column */}
                     <div
                       data-aos={imageOnLeft ? 'fade-left' : 'fade-right'}
-                      data-aos-duration="900"
-                      data-aos-delay="150"
+                      data-aos-duration="650"
+                      data-aos-delay="60"
                       data-aos-anchor-placement="top-bottom"
                       className={cn(
                         'flex flex-col justify-center lg:col-span-6',

@@ -15,7 +15,7 @@ import Footer from './Footer/Footer';
 const Home = () => {
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-x-clip">
       <Hero/>
       <About/>
       <Skills/>

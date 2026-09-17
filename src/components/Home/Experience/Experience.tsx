@@ -20,7 +20,9 @@ const Experience = () => {
         {experiences.map((item, index) => {
           return (
             <div
-            data-aos="zoom-in" data-aos-delay={index * 100} data-aos-anchor-placement="top-center" 
+              data-aos="zoom-in" 
+              data-aos-delay={Math.min(index * 60, 150)} 
+              data-aos-anchor-placement="top-bottom" 
               key={index}
               className={`relative flex flex-col md:flex-row gap-8 mb-12 ${
                 index % 2 === 0 ? 'md:flex-row-reverse' : ''

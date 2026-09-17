@@ -45,7 +45,7 @@ export default function AboutDetailPage() {
               <article
                 key={activity.id}
                 data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
-                data-aos-delay={index * 100}
+                data-aos-delay={Math.min(index * 50, 150)}
                 data-aos-anchor-placement="top-bottom"
                 className="grid grid-cols-1 items-center gap-5 sm:gap-8 lg:grid-cols-2 lg:gap-14"
               >
@@ -93,8 +93,8 @@ export default function AboutDetailPage() {
             <article 
               key={item.id} 
               data-aos="fade-up"
-              data-aos-delay={index * 120}
-              data-aos-duration="700"
+              data-aos-delay={Math.min(index * 50, 150)}
+              data-aos-duration="600"
               data-aos-anchor-placement="top-bottom"
               className="group rounded-xl sm:rounded-2xl border border-gray-200/60 bg-white/50 p-4 sm:p-5 text-center shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md dark:border-gray-700/60 dark:bg-gray-800/50"
             >
@@ -126,7 +126,7 @@ export default function AboutDetailPage() {
           {/* Vertical Timeline Line */}
           <div
             data-aos="fade-down"
-            data-aos-duration="1000"
+            data-aos-duration="650"
             className="absolute bottom-6 left-3.5 top-6 w-0.5 bg-gradient-to-b from-blue-300 via-blue-500 to-indigo-700 dark:from-blue-400/30 dark:via-blue-400/70 dark:to-indigo-400/30 sm:left-4 md:left-1/2 md:-translate-x-1/2"
           />
 
@@ -147,7 +147,7 @@ export default function AboutDetailPage() {
                   <div
                     data-aos="zoom-in"
                     data-aos-duration="600"
-                    data-aos-offset="100"
+                    data-aos-offset="40"
                     data-aos-anchor-placement="top-bottom"
                     className={cn(
                       'absolute left-3.5 top-6 z-10 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full border-4 border-gray-100 bg-gray-100 dark:border-gray-900 dark:bg-gray-900 sm:left-4 sm:top-8 sm:h-8 sm:w-8 md:left-1/2',
@@ -160,8 +160,8 @@ export default function AboutDetailPage() {
                   {/* Card */}
                   <div
                     data-aos={cardOnLeft ? 'fade-right' : 'fade-left'}
-                    data-aos-duration="800"
-                    data-aos-offset="120"
+                    data-aos-duration="650"
+                    data-aos-offset="40"
                     data-aos-anchor-placement="top-bottom"
                     className={cn(
                       'relative ml-7 w-[calc(100%-1.75rem)] rounded-xl sm:rounded-2xl border border-gray-200/80 bg-white/75 p-4 sm:p-6 shadow-md backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-blue-400/60 hover:shadow-[0_0_28px_rgba(59,130,246,0.15)] dark:border-white/10 dark:bg-zinc-900/75 sm:ml-10 sm:w-[calc(100%-2.5rem)] md:ml-0 md:w-[calc(50%-2.5rem)] lg:w-[calc(50%-3rem)]',

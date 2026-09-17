@@ -8,15 +8,21 @@ import { Filter, Sparkles } from 'lucide-react'
 const Projects = () => {
   return (
     <div 
-      data-aos="fade-up" data-aos-delay="400" data-aos-anchor-placement="top-center" 
       id='projects'
       className='py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24'
     >
-      <SectionHeading title_1='Featured' title_2='Projects' description='A selection of my recent works and technical projects.' />
+      <div data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+        <SectionHeading title_1='Featured' title_2='Projects' description='A selection of my recent works and technical projects.' />
+      </div>
       <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-[80%] mx-auto'>
         {projects.map((project, index) => {
           return (
-            <div key={index}>
+            <div 
+              key={index}
+              data-aos="fade-up"
+              data-aos-delay={Math.min(index * 70, 200)}
+              data-aos-anchor-placement="top-bottom"
+            >
               <ProjectCard {...project} />
             </div>
           )

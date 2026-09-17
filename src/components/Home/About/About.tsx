@@ -17,7 +17,7 @@ const About = ({ showDetailLink = true }: AboutProps) => {
   return (
     <div id="about" className="py-8 sm:py-12 md:py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24">
       {/* section heading */}
-      <div data-aos="fade-down" data-aos-duration="800">
+      <div data-aos="fade-down" data-aos-duration="600">
         <SectionHeading 
           title_1="About" 
           title_2="Me" 
@@ -26,7 +26,7 @@ const About = ({ showDetailLink = true }: AboutProps) => {
       </div>
       <div className="grid w-[94%] sm:w-[90%] max-w-6xl mx-auto grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
    {/* Image */}
-<div data-aos="fade-right" data-aos-duration="900" data-aos-anchor-placement="top-bottom" className="relative w-full max-w-[500px] lg:max-w-[600px] h-[260px] sm:h-[360px] md:h-[400px] lg:h-auto lg:aspect-square mx-auto">
+<div data-aos="fade-right" data-aos-duration="650" data-aos-anchor-placement="top-bottom" className="relative w-full max-w-[500px] lg:max-w-[600px] h-[260px] sm:h-[360px] md:h-[400px] lg:h-auto lg:aspect-square mx-auto">
   <div className="h-full w-full rounded-2xl p-2 overflow-visible">
     <Lanyard
   position={[0, 0, 7]}
@@ -40,7 +40,7 @@ const About = ({ showDetailLink = true }: AboutProps) => {
 </div>
 
 {/* content */}
-<div data-aos="fade-left" data-aos-duration="900" data-aos-delay="200" data-aos-anchor-placement="top-bottom" className="space-y-4 sm:space-y-6 flex-1 min-w-0 break-words lg:-translate-y-6">
+<div data-aos="fade-left" data-aos-duration="650" data-aos-delay="80" data-aos-anchor-placement="top-bottom" className="space-y-4 sm:space-y-6 flex-1 min-w-0 break-words lg:-translate-y-6">
   <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold break-words">
     {aboutMe.role || "A passionate developer who love to create projects"}
   </h3>
@@ -62,7 +62,7 @@ const About = ({ showDetailLink = true }: AboutProps) => {
       <div
         key={item.text}
         data-aos="fade-up"
-        data-aos-delay={300 + index * 100}
+        data-aos-delay={Math.min(index * 50, 150)}
         data-aos-anchor-placement="top-bottom"
         className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm"
       >
@@ -78,7 +78,7 @@ const About = ({ showDetailLink = true }: AboutProps) => {
   })}
 </div>
 
-  <div data-aos="fade-up" data-aos-delay="500" className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
+  <div data-aos="fade-up" data-aos-delay="100" className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
     {showDetailLink && (
       <Link
         href="/about/detail-about"
@@ -101,7 +101,7 @@ const About = ({ showDetailLink = true }: AboutProps) => {
               <div 
                 key={stat.label} 
                 data-aos="zoom-in-up" 
-                data-aos-delay={index * 120} 
+                data-aos-delay={index * 50} 
                 data-aos-anchor-placement="top-bottom"
                 className="bg-white dark:bg-gray-800 shadow rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-6 text-center hover:scale-105 transition-transform duration-300"
               >

@@ -38,18 +38,18 @@ const Skill = () => {
                         </h3>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-
                             {category.skills.map((skill, index) => {
-
-                                return <div 
-                                data-aos="zoom-in" data-aos-delay={index * 100} data-aos-anchor-placement="top-center" key={index}>
+                                return (
+                                  <div 
+                                    data-aos="zoom-in" 
+                                    data-aos-delay={(index % 6) * 40} 
+                                    data-aos-anchor-placement="top-bottom" 
+                                    key={index}
+                                  >
                                     <Skillcard name={skill.name} icon={skill.icon}/>
-                                </div>
-
-                                    
-
+                                  </div>
+                                )
                             })}
-
                         </div>
 
                     </div>

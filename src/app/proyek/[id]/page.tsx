@@ -9,12 +9,12 @@ import { cn } from '@/lib/utils';
 import { Metadata } from 'next';
 import { supabase } from '@/lib/supabase';
 
-// Dynamic Route: app/project/[id]/page.tsx
-interface ProjectDetailPageProps {
+// Dynamic Route: app/proyek/[id]/page.tsx (Modul 02 Step 7 & Modul 03)
+interface ProyekDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ProyekDetailPageProps): Promise<Metadata> {
   const { id } = await params;
   let project = projects.find((p) => p.id === id || p.slug === id);
 
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
       .maybeSingle();
     if (dbItem) {
       return {
-        title: `${dbItem.judul} | Detail Project`,
+        title: `${dbItem.judul} | Detail Proyek`,
         description: dbItem.deskripsi,
       };
     }
@@ -34,21 +34,21 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
 
   if (!project) {
     return {
-      title: 'Project Not Found | Goldie Gladwin Portfolio',
+      title: 'Proyek Tidak Ditemukan | Portfolio',
     };
   }
 
   return {
-    title: `${project.title} | Detail Project`,
+    title: `${project.title} | Detail Proyek`,
     description: project.description,
   };
 }
 
-export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  // Await params as required by Next.js 15+
+export default async function ProyekDetailPage({ params }: ProyekDetailPageProps) {
+  // Await params as required by Next.js 15+ (Modul 02 Step 7)
   const { id } = await params;
 
-  // Mencari proyek dari Supabase jika numeric ID
+  // Mencari proyek dari Supabase jika numeric ID (Modul 03)
   let project: any = null;
   if (!isNaN(Number(id))) {
     const { data: dbItem } = await supabase
@@ -70,7 +70,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         keyFeatures: [
           'Arsitektur responsif dan modern dengan performa optimal',
           'Navigasi antarmuka intuitif dan ramah pengguna',
-          'Terintegrasi dengan komponen Next.js modern',
+          'Terintegrasi dengan database cloud Supabase PostgreSQL',
         ],
         image: dbItem.image || '/images/managemens.png',
         techStack: typeof dbItem.teknologi === 'string'
@@ -87,6 +87,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     project = projects.find((p) => p.id === id || p.slug === id);
   }
 
+  // Jika ID tidak terdaftar, arahkan ke 404 kustom via notFound() (Modul 02 Step 8)
   if (!project) {
     notFound();
   }
@@ -105,10 +106,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           </Link>
 
           <Link
-            href="/project"
+            href="/proyek"
             className="text-xs sm:text-sm font-semibold text-indigo-600 hover:underline dark:text-indigo-400"
           >
-            Katalog searchParams &rarr;
+            Katalog Proyek &rarr;
           </Link>
         </div>
 
@@ -122,7 +123,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 {project.kategori || project.category || 'Featured'}
               </span>
               <span className="font-mono text-xs text-slate-400 dark:text-gray-400">
-                Dynamic Route: /project/{id} (ID: #{project.id})
+                Dynamic Route: /proyek/{id} (ID: #{project.id})
               </span>
             </div>
 
@@ -132,7 +133,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           </div>
 
           {/* Cover Image with Tailwind aspect ratio and rounded styling */}
-          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-gray-200 shadow-md dark:border-gray-700">
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-gray-200 shadow-md dark:border-gray-700 bg-slate-100 dark:bg-gray-700">
             <Image
               src={project.image}
               alt={project.title}
@@ -146,7 +147,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           {/* Latar Belakang & Solusi */}
           <div className="space-y-2">
             <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              Latar Belakang & Solusi Proyek:
+              Latar Belakang &amp; Solusi Proyek:
             </h2>
             <p className="text-sm sm:text-base leading-relaxed text-slate-600 dark:text-gray-300">
               {project.longDescription || project.description}
@@ -215,10 +216,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             )}
 
             <Link
-              href="/projects/detailproject"
+              href="/proyek"
               className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'text-xs')}
             >
-              Lihat Seluruh Showcase Proyek &rarr;
+              Lihat Semua Proyek di Katalog &rarr;
             </Link>
           </div>
         </article>

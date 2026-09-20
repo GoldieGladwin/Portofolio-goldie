@@ -24,7 +24,7 @@ const MobileNav = ({ showNav, closeNav }: Props) => {
         <div className={`text-white ${sidebarOpenClose} fixed justify-center flex flex-col h-full transform transition-all duration-500 delay-300 w-[80%] sm:w-[60%] bg-indigo-700 space-y-6 z-1050 `}>
             {Navlinks.map((link, index) => {
                 return <Link key={index} href={link.href} onClick={closeNav}>
-                    <p className="text-white w-fit text-[20px] ml-12 border-b-[1.5px pb-1 sm:text-[30%]">
+                    <p className="text-white w-fit text-[20px] ml-12 border-b-[1.5px] border-white/20 pb-1">
                     {link.name}
                     </p>
                 </Link>

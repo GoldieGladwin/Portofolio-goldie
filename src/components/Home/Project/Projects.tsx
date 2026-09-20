@@ -85,7 +85,7 @@ const Projects = () => {
       {/* Tombol Lihat Semua Proyek */}
       <div className='mt-12 flex items-center justify-center w-[90%] sm:w-[80%] mx-auto'>
         <Link
-          href="/project"
+          href="/proyek"
           className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
         >
           <Filter className="w-4 h-4" />

@@ -77,12 +77,13 @@ src/
 │   ├── layout.tsx                     # Root layout aplikasi (Navbar, Footer, Providers)
 │   ├── page.tsx                       # Halaman utama (One-Page Scroll Sections)
 │   ├── not-found.tsx                  # Halaman 404 kustom
-│   ├── project/
-│   │   ├── page.tsx                   # Katalog proyek dengan filter searchParams
+│   ├── proyek/
+│   │   ├── page.tsx                   # Katalog proyek (Supabase + filter searchParams)
 │   │   └── [id]/
-│   │       └── page.tsx               # Rute Dinamis Detail Proyek (ID / Slug)
-│   ├── proyek/                        # Rute bahasa Indonesia (alias modul)
-│   └── projects/                      # Rute showcase komprehensif
+│   │       └── page.tsx               # Rute Dinamis Detail Proyek (ID / Slug dari Supabase)
+│   ├── tentang/                       # Rute standar modul (mengarah ke detail About)
+│   ├── keahlian/                      # Rute standar modul (mengarah ke section Skills)
+│   └── kontak/                        # Rute standar modul (mengarah ke section Contact)
 ├── components/
 │   ├── CounterApresiasi.tsx           # Komponen interaktif apresiasi karya
 │   ├── helper/
@@ -96,8 +97,8 @@ src/
 │   │   ├── About/                     # Biografi lengkap, highlight, & CounterApresiasi
 │   │   ├── Skills/                    # Tampilan kategori skill (Frontend, Backend, Tools)
 │   │   ├── Project/                   # Grid proyek pilihan & tombol rute dinamis
-│   │   │   ├── Projects.tsx           # Container section proyek
-│   │   │   └── projectcard.tsx        # Kartu proyek dengan link ke /project/[id]
+│   │   │   ├── Projects.tsx           # Container section proyek (terhubung ke /proyek)
+│   │   │   └── projectcard.tsx        # Kartu proyek dengan link ke /proyek/[id]
 │   │   ├── Experience/                # Riwayat pendidikan & pengalaman kejuruan
 │   │   ├── ClientRiview/              # Testimoni & ulasan rekan proyek
 │   │   ├── contact/                   # Formulir EmailJS & kartu info kontak
@@ -213,11 +214,9 @@ Tabel ini menyimpan data karya dan proyek portofolio yang sebelumnya bersifat st
 * **Tabel `pengalaman`:** RLS dinonaktifkan (`DISABLE ROW LEVEL SECURITY`) untuk akses cepat dan langsung tanpa batasan policy.
 
 ### C. Halaman Implementasi Supabase
-1. **`/test-supabase`**: Halaman pengujian koneksi dan respon JSON langsung dari Supabase (*Step 9*).
-2. **`/proyek`**: Halaman katalog karya kejuruan standar Modul Pertemuan 03 yang merender kartu proyek dari Supabase (*Step 10*).
-3. **`/project`**: Halaman katalog portofolio dinamis dengan fitur filter kategori `searchParams`.
-4. **`/project/[id]`**: Detail proyek dinamis yang memprioritaskan pengambilan data spesifik dari Supabase.
-5. **`/#experience` (`Experience.tsx`)**: Timeline Road Pengalaman & Pendidikan dinamis berbasis data Supabase.
+1. **`/proyek`**: Halaman katalog karya kejuruan standar Modul Pertemuan 02 & 03 yang mengambil data langsung dari Supabase disertai fitur filter kategori `searchParams` (`Semua`, `Web`, `Mobile`, `IoT`).
+2. **`/proyek/[id]`**: Detail proyek dinamis (`await params` Next.js 15+) yang mengambil data spesifik dari Supabase dan menangani kondisi ID tidak terdaftar dengan `notFound()`.
+3. **`/#experience` (`Experience.tsx`)**: Timeline Road Pengalaman & Pendidikan dinamis berbasis data tabel `pengalaman` Supabase.
 
 ### D. Tabel Tambahan: `pengalaman` (Road Experience & Education Dinamis)
 Tabel ini mengelola linimasa perjalanan karir, proyek independen, dan pendidikan kejuruan yang tampil pada komponen `Experience.tsx` di Beranda:
@@ -238,7 +237,34 @@ Tabel ini mengelola linimasa perjalanan karir, proyek independen, dan pendidikan
 * **Auto-Append:** Setiap baris baru yang di-input via Supabase Table Editor otomatis mendapatkan ID yang lebih besar, sehingga kartu dan simpul (node) timeline baru otomatis dirender di **bagian paling bawah garis road**, membentuk alur perjalanan karir yang berkesinambungan.
 * **Resilient Fallback:** Jika koneksi Supabase terputus, komponen secara cerdas menggunakan data fallback lokal dari `src/data.ts`.
 
+---
 
+## 🚀 7. Catatan Pembaruan & Refactoring Terbaru (Changelog)
+
+Berikut rincian optimasi dan pembaruan menyeluruh yang telah diterapkan:
+
+1. **Unifikasi & Penyelarasan Rute Sesuai Standar Modul 1, 2, dan 3:**
+   * Menyelaraskan seluruh rute katalog ke **`/proyek`** dan rute detail dinamis ke **`/proyek/[id]`** (bahasa Indonesia resmi modul).
+   * Memindahkan logika filter kategori `searchParams` (`Semua`, `Web`, `Mobile`, `IoT`) dan pembacaan `await params` Next.js 15+ ke rute `/proyek`.
+   * Menambahkan rute fallback terpadu: `/tentang`, `/keahlian`, `/kontak`, dan `/about` agar penguji yang mengetik URL langsung di address bar tidak mengalami error 404.
+
+2. **Pembersihan Folder & Halaman Unused / Redundan:**
+   * **`src/app/projects/detailproject` [DIHAPUS]:** Menghapus halaman mockup vertikal statis lama yang tidak lagi dipakai.
+   * **`src/app/test-supabase` [DIHAPUS]:** Menghapus halaman uji coba sementara Step 9 Modul 3 setelah integrasi database Supabase terbukti aktif dan terintegrasi langsung di halaman utama.
+   * **`src/app/project` [DIHAPUS]:** Menghapus folder duplikat bahasa Inggris setelah fiturnya disatukan seutuhnya ke `src/app/proyek`.
+
+3. **Klarifikasi Arsitektur Supabase Modul 3:**
+   * Memastikan tidak perlu membuat folder dan file data `.ts` statis baru lagi (seperti `data/proyek.ts` di Modul 2), karena data proyek diambil langsung (*fetch / select*) dari database cloud Supabase di dalam Server Component (`page.tsx`).
+
+4. **Redesain Splash Screen Bertema Putih & Monogram `G.G`:**
+   * Mengubah splash screen menjadi bertema **putih bersih (*clean light mode*)** dengan tipografi minimalis **`G.G`** (font tebal dengan titik pemisah beraksen indigo yang berkedip halus).
+   * Menambahkan **loading bar horizontal** di bawah teks yang terisi secara mulus dari `0%` ke `100%` (~1.1 detik).
+   * Menerapkan efek transisi **tirai pembuka ditarik atas & bawah (*Vertical Split Curtain Reveal*)** dengan akselerasi GPU (`cubic-bezier(0.77, 0, 0.175, 1)`), memberikan kesan panggung teater yang dramatis saat homepage terbuka.
+
+5. **Peningkatan Responsivitas Mobile & Stabilitas 3D Lanyard:**
+   * Menyesuaikan ukuran tombol *Download CV* dan elemen header agar proporsional pada viewport smartphone (375px), bebas dari *horizontal overflow*.
+   * Memastikan kartu 3D interaktif **Lanyard** termuat langsung secara stabil dan dapat diinteraksikan secara langsung di section About Me.
+   * Merapikan syntax tag penutup pada Navbar dan memastikan project lolos kompilasi produksi `npm run build` dengan status **Exit Code 0**.
 
 ---
 

@@ -199,3 +199,14 @@
   animation: shimmer-sweep 2.5s ease-in-out infinite;
 }
 
+/* Sembunyikan navbar di halaman Error 404 dan Admin Login Doorpass */
+body:has([data-hide-nav="true"]) #portfolio-navbar,
+body:has([data-hide-nav="true"]) .portfolio-navbar,
+body:has([data-page="not-found"]) #portfolio-navbar,
+body:has([data-page="not-found"]) .portfolio-navbar,
+body:has([data-page="admin-login"]) #portfolio-navbar,
+body:has([data-page="admin-login"]) .portfolio-navbar {
+  display: none !important;
+}
+
+

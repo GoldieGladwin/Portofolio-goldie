@@ -29,11 +29,10 @@ const Nav = ({ openNav }: Props) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full z-50 h-[10vh] sm:h-[12vh] transition-all duration-300 ${
-        navBg
+      className={`fixed top-0 left-0 w-full z-50 h-[10vh] sm:h-[12vh] transition-all duration-300 ${navBg
           ? "dark:bg-gray-900/95 bg-white/95 backdrop-blur-md shadow-md border-b border-gray-200/50 dark:border-gray-800/50"
           : "bg-transparent"
-      }`}
+        }`}
     >
       <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
         {/* logo */}
@@ -66,10 +65,10 @@ const Nav = ({ openNav }: Props) => {
               <span>Download CV</span>
             </span>
           </a>
-        {/* theme toggler */}
-        <ThemeToggler />
-        {/* burger menu */}
-        <MenuIcon onClick={openNav} className="w-8 h-8 cursor-pointer text-black dark:text-white lg:hidden" />
+          {/* theme toggler */}
+          <ThemeToggler />
+          {/* burger menu */}
+          <MenuIcon onClick={openNav} className="w-8 h-8 cursor-pointer text-black dark:text-white lg:hidden" />
         </div>
       </div>
     </div>

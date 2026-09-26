@@ -3,7 +3,11 @@ import { FolderOpen, Home } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <main className="min-h-[75vh] flex items-center justify-center px-4 py-20 bg-gray-100 dark:bg-gray-900">
+    <main
+      data-hide-nav="true"
+      data-page="not-found"
+      className="min-h-screen flex items-center justify-center px-4 py-20 bg-gray-100 dark:bg-gray-900"
+    >
       <div className="max-w-md w-full text-center space-y-6 p-8 rounded-3xl bg-white/80 dark:bg-gray-800/80 border border-gray-200/80 dark:border-gray-700 shadow-xl backdrop-blur-md">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/50 shadow-inner">
           <span className="text-4xl font-extrabold font-mono text-indigo-600 dark:text-indigo-400">

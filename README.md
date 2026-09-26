@@ -9,12 +9,15 @@ Portofolio web modern, responsif, dan interaktif yang dibangun menggunakan **Nex
 | No | Kriteria Tugas Modul | Status | Keterangan Implementasi |
 |:---|:---|:---:|:---|
 | 1 | **Styling Tailwind CSS** | ✅ Selesai | Desain responsif (*mobile-first*), dark/light mode toggle, glassmorphism, dan utility layout. |
-| 2 | **Dynamic Route (`project/[id]`)** | ✅ Selesai | Folder `src/app/project/[id]` & `src/app/proyek/[id]` dengan *async params* Next.js 15 & 404 handler. |
-| 3 | **SearchParams (`category`)** | ✅ Selesai | Halaman katalog `src/app/project` & `src/app/proyek` dengan filter kategori URL query string. |
+| 2 | **Dynamic Route (`proyek/[id]`)** | ✅ Selesai | Folder `src/app/proyek/[id]` dengan *async params* Next.js 15+ & 404 handler. |
+| 3 | **SearchParams (`category`)** | ✅ Selesai | Halaman katalog `src/app/proyek` dengan filter kategori URL query string. |
 | 4 | **Penambahan Components** | ✅ Selesai | Pemisahan modular (Nav, Hero, About, Skills, Projects, Experience, Testimonials, Contact, Footer, Counter). |
-| 5 | **Fitur Interaktif & 404 Page** | ✅ Selesai | Custom `not-found.tsx`, Counter Apresiasi interaktif, form kontak EmailJS. |
-| 6 | **Dokumentasi Lengkap README.md** | ✅ Selesai | Dokumentasi fitur, styling, komponen, dan rute dinamis secara mendalam. |
+| 5 | **Fitur Interaktif & 404 Page** | ✅ Selesai | Custom `not-found.tsx`, Counter Apresiasi interaktif, form kontak Web3Forms/EmailJS. |
+| 6 | **Dokumentasi Lengkap README.md** | ✅ Selesai | Dokumentasi fitur, styling, komponen, Supabase, dan CMS CRUD secara mendalam. |
 | 7 | **Database Supabase (Proyek & Road Experience)** | ✅ Selesai | Cloud database PostgreSQL untuk data Proyek dan Road Pengalaman (`Experience.tsx`) dinamis dengan fallback data. |
+| 8 | **Admin Panel & Secret Doorpass** | ✅ Selesai | Proteksi pintu rahasia URL (`/admin?doorpass=...`), Supabase Auth & verifikasi tabel `profiles` role admin. |
+| 9 | **Studio Live CMS & Full CRUD** | ✅ Selesai | Mode Live visual homepage & mode tabel untuk Create, Read, Update, Delete data Proyek & Pengalaman secara instan. |
+| 10 | **Tautan Live Deploy Proyek (`link_deploy`)** | ✅ Selesai | Kolom `link_deploy` pada Supabase dan tombol "Kunjungi Proyek" langsung ke link demo produksi di `/proyek`. |
 
 ---
 
@@ -239,7 +242,52 @@ Tabel ini mengelola linimasa perjalanan karir, proyek independen, dan pendidikan
 
 ---
 
-## 🚀 7. Catatan Pembaruan & Refactoring Terbaru (Changelog)
+## 🔐 7. Dokumentasi Admin Panel, Live Studio CMS & Full CRUD (Modul Pertemuan 04)
+
+Proyek ini telah dilengkapi dengan sistem administrasi konten (**CMS - Content Management System**) lengkap dengan proteksi keamanan ganda, antarmuka visual ganda (*Live Studio Mirror* & *Table Mode*), serta Server Actions untuk operasi **CRUD (Create, Read, Update, Delete)** data Proyek dan Road Pengalaman:
+
+### A. Sistem Keamanan "Secret Doorpass" (`src/middleware.ts` & `src/lib/doorpass.ts`)
+* **Auto 404 Cloaking:** Siapapun pengunjung yang mencoba mengakses rute `/admin`, `/admin/login`, atau `/admin/proyek` secara langsung tanpa kunci akan otomatis menerima **HTTP 404 Not Found**, sehingga rute panel admin tersembunyi dari publik dan bot pemindai.
+* **Membuka Pintu (Doorpass Unlock):** Admin membuka akses dengan menambahkan parameter URL rahasia:
+  ```text
+  http://localhost:3000/admin?doorpass=figmap
+  ```
+* **Mekanisme Kerja:**
+  1. Middleware mendeteksi query `doorpass` yang sesuai dengan `process.env.ADMIN_DOORPASS`.
+  2. Middleware menetapkan cookie terenkripsi `admin_doorpass_unlocked=true` (`httpOnly`, `sameSite: 'lax'`).
+  3. Pengguna dialihkan secara rapi ke halaman `/admin/login` (parameter doorpass otomatis dibersihkan dari bilah URL).
+
+### B. Autentikasi Supabase & Role-Based Access Control (RBAC)
+* Setelah pintu terbuka, admin **wajib login manual** dengan Email dan Password yang terdaftar di **Supabase Auth**.
+* **Verifikasi Dua Lapis:** Sistem memeriksa tabel relasional `public.profiles` di Supabase untuk memastikan akun memiliki atribut `role = 'admin'`. Jika bukan admin, akses ditolak dan sesi otomatis di-logout.
+* **Logout Terpadu:** Tombol Logout di navbar admin menghapus seluruh sesi Supabase Auth, menghapus cookie `admin_doorpass_unlocked`, dan mengembalikan pintu admin ke status terkunci rapat (kembali 404).
+
+### C. Antarmuka Studio Live CMS (`src/app/admin/proyek/ProyekTableClient.tsx`)
+Panel admin menyediakan dua mode pengalaman pengguna yang dapat dialihkan secara instan:
+1. **Mode Live Studio (Homepage Duplication):**
+   * Mereplikasi tampilan homepage publik secara interaktif.
+   * Dilengkapi bilah aksi melayang (*Floating Action Bar*) untuk **+ Tambah Proyek** dan **+ Tambah Pengalaman**.
+   * Pada setiap kartu proyek dan simpul timeline riwayat, tersedia tombol cepat **Edit (Ikon Pensil)** dan **Hapus (Ikon Tong Sampah)**.
+2. **Mode Tabel Klasik:**
+   * Tampilan tabel data ringkas dan responsif untuk pemindaian cepat puluhan item data secara terstruktur.
+
+### D. Fitur Operasi CRUD Lengkap (Next.js Server Actions)
+Operasi database dikelola melalui Next.js Server Actions di `src/app/admin/proyek/actions.ts`:
+1. **Tambah Proyek (`tambahProyekAction`):** Form modal interaktif untuk Judul, Kategori (`Web`, `Mobile`, `IoT`), Deskripsi, Teknologi, Link GitHub, dan Link Deploy.
+2. **Edit Proyek (`editProyekAction`):** Modal edit dengan data yang otomatis terisi sesuai ID baris yang dipilih.
+3. **Hapus Proyek (`hapusProyekAction`):** Modal konfirmasi pengamanan dengan peringatan visual bahaya sebelum data benar-benar dihapus.
+4. **Tambah Pengalaman (`tambahPengalamanAction`):** Form modal untuk Tipe (`work`, `project`, `education`), Posisi/Role, Perusahaan/Sekolah, Periode, Deskripsi, dan Teknologi.
+5. **Edit Pengalaman (`editPengalamanAction`):** Memperbarui linimasa karir secara langsung.
+6. **Hapus Pengalaman (`hapusPengalamanAction`):** Konfirmasi penghapusan riwayat pengalaman.
+* **Instant Revalidation:** Setiap operasi memicu `revalidatePath('/admin/proyek')`, `revalidatePath('/proyek')`, dan `revalidatePath('/')` sehingga data terbaru langsung tersinkronisasi di seluruh halaman web tanpa delay.
+
+### E. Dukungan Kolom `link_deploy` (Live Deploy Kunjungi Proyek)
+* Menambahkan kolom `link_deploy TEXT` pada tabel Supabase `proyek`.
+* Menampilkan tombol **"Kunjungi Proyek" (ExternalLink)** pada katalog `/proyek` untuk proyek-proyek yang memiliki tautan demo produksi aktif.
+
+---
+
+## 🚀 8. Catatan Pembaruan & Refactoring Terbaru (Changelog)
 
 Berikut rincian optimasi dan pembaruan menyeluruh yang telah diterapkan:
 
@@ -253,18 +301,25 @@ Berikut rincian optimasi dan pembaruan menyeluruh yang telah diterapkan:
    * **`src/app/test-supabase` [DIHAPUS]:** Menghapus halaman uji coba sementara Step 9 Modul 3 setelah integrasi database Supabase terbukti aktif dan terintegrasi langsung di halaman utama.
    * **`src/app/project` [DIHAPUS]:** Menghapus folder duplikat bahasa Inggris setelah fiturnya disatukan seutuhnya ke `src/app/proyek`.
 
-3. **Klarifikasi Arsitektur Supabase Modul 3:**
-   * Memastikan tidak perlu membuat folder dan file data `.ts` statis baru lagi (seperti `data/proyek.ts` di Modul 2), karena data proyek diambil langsung (*fetch / select*) dari database cloud Supabase di dalam Server Component (`page.tsx`).
+3. **Implementasi Admin Panel & Secret Doorpass Keamanan Ganda (Modul 4):**
+   * Menyematkan middleware pelindung berbasis doorpass secret (`ADMIN_DOORPASS`) yang secara default menyembunyikan rute `/admin` dengan status 404 Cloaking.
+   * Menghubungkan alur login ke Supabase Authentication dan verifikasi role `'admin'` di tabel `profiles`.
+   * Membangun antarmuka Studio Live CMS dengan visual homepage preview ganda dan mode tabel cepat di `/admin/proyek`.
+   * Implementasi Server Actions untuk Full CRUD (Create, Read, Update, Delete) pada tabel `proyek` dan `pengalaman` beserta revalidasi cache instan.
+   * Menambahkan fitur tautan `link_deploy` dengan tombol "Kunjungi Proyek" di katalog `/proyek`.
 
 4. **Redesain Splash Screen Bertema Putih & Monogram `G.G`:**
    * Mengubah splash screen menjadi bertema **putih bersih (*clean light mode*)** dengan tipografi minimalis **`G.G`** (font tebal dengan titik pemisah beraksen indigo yang berkedip halus).
-   * Menambahkan **loading bar horizontal** di bawah teks yang terisi secara mulus dari `0%` ke `100%` (~1.1 detik).
+   * Menambahkan **loading bar horizontal** di bawah teks yang terisi secara mulus dari `0%` ke `100%` (~0.8 detik) dilengkapi efek shimmer gradien.
    * Menerapkan efek transisi **tirai pembuka ditarik atas & bawah (*Vertical Split Curtain Reveal*)** dengan akselerasi GPU (`cubic-bezier(0.77, 0, 0.175, 1)`), memberikan kesan panggung teater yang dramatis saat homepage terbuka.
+   * Dilengkapi fail-safe timeout mutlak agar scrollbar dan konten halaman selalu terbuka lancar di semua peramban.
 
-5. **Peningkatan Responsivitas Mobile & Stabilitas 3D Lanyard:**
+5. **Peningkatan Responsivitas Mobile, Navigasi Pintar & Stabilitas 3D Lanyard:**
    * Menyesuaikan ukuran tombol *Download CV* dan elemen header agar proporsional pada viewport smartphone (375px), bebas dari *horizontal overflow*.
+   * Mengintegrasikan deteksi rute otomatis pada `ResponsiveNav` agar navbar publik secara elegan disembunyikan saat pengguna berada di area panel admin atau halaman 404 kustom.
    * Memastikan kartu 3D interaktif **Lanyard** termuat langsung secara stabil dan dapat diinteraksikan secara langsung di section About Me.
-   * Merapikan syntax tag penutup pada Navbar dan memastikan project lolos kompilasi produksi `npm run build` dengan status **Exit Code 0**.
+   * Merapikan skema database SQL (`supabase_schema.sql`) untuk eksekusi one-click di Supabase SQL Editor.
+   * Memastikan seluruh proyek lolos kompilasi produksi `npm run build` dengan status **Exit Code 0**.
 
 ---
 

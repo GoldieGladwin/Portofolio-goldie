@@ -90,8 +90,8 @@ export default function AboutDetailPage() {
 
         <div className="mt-8 sm:mt-12 grid grid-cols-1 gap-3.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-4 md:gap-5">
           {learningNow.map((item, index) => (
-            <article 
-              key={item.id} 
+            <article
+              key={item.id}
               data-aos="fade-up"
               data-aos-delay={Math.min(index * 50, 150)}
               data-aos-duration="600"

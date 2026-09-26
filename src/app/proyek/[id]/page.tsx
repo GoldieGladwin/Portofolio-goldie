@@ -77,7 +77,7 @@ export default async function ProyekDetailPage({ params }: ProyekDetailPageProps
           ? dbItem.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
           : [],
         githubUrl: dbItem.link || '',
-        demoUrl: '',
+        demoUrl: dbItem.link_deploy || dbItem.demo_url || '',
       };
     }
   }
@@ -199,7 +199,7 @@ export default async function ProyekDetailPage({ params }: ProyekDetailPageProps
                 className={cn(buttonVariants({ variant: 'default', size: 'sm' }), 'gap-2')}
               >
                 <ExternalLink className="h-4 w-4" />
-                Live Demo
+                Kunjungi Proyek
               </a>
             ) : null}
 

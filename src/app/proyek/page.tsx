@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { projects as fallbackProjects } from '@/data';
-import { ArrowLeft, Filter, Sparkles } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Filter, Sparkles } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 // Standar Modul Pertemuan 02 (Step 6: searchParams) & Modul 03 (Step 10: Integrasi Supabase)
@@ -20,18 +20,19 @@ export default async function ProyekPage({ searchParams }: ProyekPageProps) {
 
   const activeProjects = (dbProjects && dbProjects.length > 0)
     ? dbProjects.map((item) => ({
-        id: String(item.id),
-        slug: String(item.id),
-        title: item.judul,
-        category: item.kategori || 'Web',
-        kategori: item.kategori || 'Web',
-        description: item.deskripsi,
-        image: item.image || '/images/managemens.png',
-        techStack: typeof item.teknologi === 'string'
-          ? item.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
-          : [],
-        githubUrl: item.link || '',
-      }))
+      id: String(item.id),
+      slug: String(item.id),
+      title: item.judul,
+      category: item.kategori || 'Web',
+      kategori: item.kategori || 'Web',
+      description: item.deskripsi,
+      image: item.image || '/images/managemens.png',
+      techStack: typeof item.teknologi === 'string'
+        ? item.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
+        : [],
+      githubUrl: item.link || '',
+      demoUrl: item.link_deploy || item.demo_url || '',
+    }))
     : fallbackProjects;
 
   const categories = ['Semua', 'Web', 'Mobile', 'IoT'];
@@ -39,10 +40,10 @@ export default async function ProyekPage({ searchParams }: ProyekPageProps) {
   // Filter kategori berdasarkan query URL searchParams (Modul 02 Step 6)
   const filtered = category && category.toLowerCase() !== 'semua'
     ? activeProjects.filter(
-        (p) =>
-          p.kategori?.toLowerCase() === category.toLowerCase() ||
-          p.category?.toLowerCase().includes(category.toLowerCase())
-      )
+      (p) =>
+        p.kategori?.toLowerCase() === category.toLowerCase() ||
+        p.category?.toLowerCase().includes(category.toLowerCase())
+    )
     : activeProjects;
 
   return (
@@ -89,11 +90,10 @@ export default async function ProyekPage({ searchParams }: ProyekPageProps) {
               <Link
                 key={cat}
                 href={href}
-                className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
-                  isActive
+                className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${isActive
                     ? 'bg-indigo-600 text-white shadow-md scale-105'
                     : 'bg-white text-slate-600 dark:bg-gray-800 dark:text-gray-300 border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-700'
-                }`}
+                  }`}
               >
                 {cat}
               </Link>
@@ -151,12 +151,26 @@ export default async function ProyekPage({ searchParams }: ProyekPageProps) {
                   ))}
                 </div>
 
-                <Link
-                  href={`/proyek/${item.id}`}
-                  className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
-                >
-                  Detail &rarr;
-                </Link>
+                <div className="flex items-center gap-2">
+                  {item.demoUrl ? (
+                    <a
+                      href={item.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors shadow-xs"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      Kunjungi Proyek
+                    </a>
+                  ) : null}
+
+                  <Link
+                    href={`/proyek/${item.id}`}
+                    className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+                  >
+                    Detail &rarr;
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

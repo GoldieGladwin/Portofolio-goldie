@@ -80,7 +80,7 @@ const ProjectCard = ({
         className={cn(buttonVariants({ variant: 'default' }), 'w-full')}
       >
         <ExternalLink className="w-4 h-4 mr-2" />
-        Live Demo
+        Kunjungi Proyek
       </a>
     </div>
   )}

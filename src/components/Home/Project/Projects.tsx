@@ -50,7 +50,7 @@ const Projects = () => {
               ? item.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
               : [],
             githubUrl: item.link || '',
-            demoUrl: '',
+            demoUrl: item.link_deploy || item.demo_url || '',
           }))
         )
       }

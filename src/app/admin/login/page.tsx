@@ -14,7 +14,7 @@ async function loginAction(formData: FormData) {
   const secretDoorpass = getDoorpassSecret();
 
   // Jika doorpass yang dikirim form tidak sesuai dengan env -> tolak mutlak
-  if (!doorpass || doorpass !== secretDoorpass) {
+  if (!doorpass || !secretDoorpass || doorpass !== secretDoorpass) {
     await revokeDoorpassAction();
     redirect('/not-found');
   }
@@ -60,7 +60,11 @@ export default async function AdminLoginPage({
   const params = await searchParams;
   const secretDoorpass = getDoorpassSecret();
 
-  const isParamValid = Boolean(params.doorpass && params.doorpass.trim() === secretDoorpass);
+  const isParamValid = Boolean(
+    secretDoorpass &&
+    params.doorpass &&
+    params.doorpass.trim() === secretDoorpass
+  );
 
   // Jika doorpass di URL tidak ada atau tidak cocok persis dengan env -> 404 Not Found!
   if (!isParamValid) {

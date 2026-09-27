@@ -22,15 +22,6 @@ export async function middleware(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const secretDoorpass = getDoorpassSecret();
 
-    // 1. Ekstrak input doorpass dari URL (?doorpass=password ATAU /admin/doorpass=password)
-    let inputDoorpass = searchParams.get('doorpass');
-    if (!inputDoorpass && pathname.includes('/admin/doorpass=')) {
-      const parts = pathname.split('/admin/doorpass=');
-      if (parts[1]) {
-        inputDoorpass = decodeURIComponent(parts[1].split('/')[0]);
-      }
-    }
-
     // Helper untuk response 404 dan membersihkan cookie doorpass yang tidak valid/stale
     const send404 = () => {
       const notFoundUrl = new URL('/not-found', request.url);
@@ -39,6 +30,20 @@ export async function middleware(request: NextRequest) {
       response404.cookies.delete(LEGACY_DOORPASS_COOKIE);
       return response404;
     };
+
+    // Jika ADMIN_DOORPASS belum disetel di .env / Vercel (kosong), tolak mutlak semua akses admin
+    if (!secretDoorpass) {
+      return send404();
+    }
+
+    // 1. Ekstrak input doorpass dari URL (?doorpass=password ATAU /admin/doorpass=password)
+    let inputDoorpass = searchParams.get('doorpass');
+    if (!inputDoorpass && pathname.includes('/admin/doorpass=')) {
+      const parts = pathname.split('/admin/doorpass=');
+      if (parts[1]) {
+        inputDoorpass = decodeURIComponent(parts[1].split('/')[0]);
+      }
+    }
 
     // KONDISI 1: User memasukkan doorpass di URL
     if (inputDoorpass !== null) {

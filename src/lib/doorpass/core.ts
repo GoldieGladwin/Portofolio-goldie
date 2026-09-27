@@ -1,12 +1,19 @@
 export const DOORPASS_SESSION_COOKIE = 'admin_doorpass_session';
 export const LEGACY_DOORPASS_COOKIE = 'admin_doorpass_unlocked';
 
+/**
+ * Mengambil sandi rahasia doorpass murni dari environment variables.
+ * Prioritas: process.env.ADMIN_DOORPASS -> process.env.NEXT_PUBLIC_ADMIN_DOORPASS.
+ * TIDAK ADA fallback string default apa pun (seperti 'figma' atau 'goldie') agar sandi
+ * selalu 100% dinamis mengikuti isi file .env.local atau Vercel Environment Variables.
+ */
 export function getDoorpassSecret(): string {
-  return (
+  const secret =
     process.env.ADMIN_DOORPASS ||
     process.env.NEXT_PUBLIC_ADMIN_DOORPASS ||
-    'figma'
-  ).trim();
+    '';
+
+  return secret.trim();
 }
 
 export async function computeDoorpassHash(secret: string): Promise<string> {
@@ -23,6 +30,7 @@ export async function verifyDoorpassSessionToken(
 ): Promise<boolean> {
   if (!token) return false;
   const currentSecret = secretOverride || getDoorpassSecret();
+  if (!currentSecret) return false;
   const expectedHash = await computeDoorpassHash(currentSecret);
   return token === expectedHash;
 }

@@ -18,6 +18,7 @@ export async function revokeDoorpassAction() {
 export async function setDoorpassUnlockedAction(secretOverride?: string) {
   const cookieStore = await cookies();
   const secret = secretOverride || getDoorpassSecret();
+  if (!secret) return { success: false };
   const token = await computeDoorpassHash(secret);
   cookieStore.set(DOORPASS_SESSION_COOKIE, token, {
     httpOnly: true,

@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createSupabaseServerClient } from '@/lib/supabase-server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export async function tambahProyekAction(formData: FormData) {
     const supabase = await createSupabaseServerClient();

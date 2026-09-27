@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { projects as fallbackProjects } from '@/data';
+import { projects as fallbackProjects } from '@/lib/constants';
 import { ArrowLeft, ExternalLink, Filter, Sparkles } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase/client';
 
 // Standar Modul Pertemuan 02 (Step 6: searchParams) & Modul 03 (Step 10: Integrasi Supabase)
 interface ProyekPageProps {

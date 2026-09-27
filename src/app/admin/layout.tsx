@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/lib/supabase-server';
-import { revokeDoorpassAction } from '@/lib/doorpass';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { revokeDoorpassAction } from '@/lib/doorpass/actions';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 

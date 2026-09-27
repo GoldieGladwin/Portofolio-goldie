@@ -25,12 +25,12 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 
 // Komponen Homepage untuk Live Duplikasi
-import Hero from '@/components/Home/Hero/Hero';
-import About from '@/components/Home/About/About';
-import Skills from '@/components/Home/Skills/Skill';
-import ClientRiview from '@/components/Home/ClientRiview/ClientRiview';
-import Contact from '@/components/Home/contact/Contact';
-import SectionHeading from '@/components/helper/SectionHeading';
+import Hero from '@/components/sections/Hero';
+import About from '@/components/sections/About';
+import Skills from '@/components/sections/Skills';
+import ClientRiview from '@/components/sections/Reviews';
+import Contact from '@/components/sections/Contact';
+import SectionHeading from '@/components/common/SectionHeading';
 
 // Server Actions
 import {

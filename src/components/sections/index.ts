@@ -1,0 +1,12 @@
+export { default as Hero } from './Hero';
+export { default as About } from './About';
+export { default as CounterApresiasi } from './CounterApresiasi';
+export { default as Skills } from './Skills';
+export { default as SkillCard } from './SkillCard';
+export { default as Projects } from './Projects';
+export { default as ProjectCard } from './ProjectCard';
+export { default as Experience } from './Experience';
+export { default as Reviews } from './Reviews';
+export { default as ReviewCard } from './ReviewCard';
+export { default as Contact } from './Contact';
+export { default as Home } from './Home';

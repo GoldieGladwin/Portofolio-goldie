@@ -1,6 +1,12 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import {
+  DOORPASS_SESSION_COOKIE,
+  LEGACY_DOORPASS_COOKIE,
+  getDoorpassSecret,
+  verifyDoorpassSessionToken,
+} from './lib/doorpass/core';
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -10,16 +16,11 @@ const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6bnJ4eGN2dm92Y3Vhb2t5cmJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTczMjUsImV4cCI6MjEwNTE3MzMyNX0.MPi8wZO3zhTW3a-bdH81zNebzepfqxt9LSEZt6KBOHc';
 
-const SECRET_DOORPASS = (
-  process.env.ADMIN_DOORPASS ||
-  process.env.NEXT_PUBLIC_ADMIN_DOORPASS ||
-  'figmap'
-).trim();
-
 export async function middleware(request: NextRequest) {
   try {
     const pathname = request.nextUrl.pathname;
     const searchParams = request.nextUrl.searchParams;
+    const secretDoorpass = getDoorpassSecret();
 
     // 1. Ekstrak input doorpass dari URL (?doorpass=password ATAU /admin/doorpass=password)
     let inputDoorpass = searchParams.get('doorpass');
@@ -30,48 +31,47 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    const isDoorpassParamValid = Boolean(
-      inputDoorpass && inputDoorpass.trim() === SECRET_DOORPASS
-    );
-
-    const hasDoorpassCookie =
-      request.cookies.get('admin_doorpass_unlocked')?.value === 'true';
-
-    // KONDISI 1: User memasukkan doorpass valid di URL (membuka pintu admin)
-    if (isDoorpassParamValid) {
-      const loginUrl = new URL('/admin/login', request.url);
-      loginUrl.searchParams.delete('doorpass'); // Bersihkan URL agar rapi
-
-      const redirectRes = NextResponse.redirect(loginUrl);
-      redirectRes.cookies.set('admin_doorpass_unlocked', 'true', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-      });
-
-      // Bersihkan sesi auth lama jika ada sisa
-      for (const c of request.cookies.getAll()) {
-        if (c.name.startsWith('sb-') || c.name.includes('auth-token')) {
-          redirectRes.cookies.delete(c.name);
-        }
-      }
-
-      return redirectRes;
-    }
-
-    // KONDISI 2: Jika Doorpass belum terbuka (tidak punya cookie & bukan dari doorpass valid)
-    // Sembunyikan route /admin/* dan tampilkan 404 (Not Found)
-    if (!hasDoorpassCookie) {
+    // Helper untuk response 404 dan membersihkan cookie doorpass yang tidak valid/stale
+    const send404 = () => {
       const notFoundUrl = new URL('/not-found', request.url);
       const response404 = NextResponse.rewrite(notFoundUrl, { status: 404 });
-      response404.cookies.delete('admin_doorpass_unlocked');
+      response404.cookies.delete(DOORPASS_SESSION_COOKIE);
+      response404.cookies.delete(LEGACY_DOORPASS_COOKIE);
       return response404;
+    };
+
+    // KONDISI 1: User memasukkan doorpass di URL
+    if (inputDoorpass !== null) {
+      if (inputDoorpass.trim() === secretDoorpass) {
+        // Doorpass valid! Arahkan ke /admin/login dengan query doorpass agar form login terbuka
+        if (pathname !== '/admin/login') {
+          const loginUrl = new URL('/admin/login', request.url);
+          loginUrl.searchParams.set('doorpass', secretDoorpass);
+          const redirectRes = NextResponse.redirect(loginUrl);
+          redirectRes.cookies.delete(LEGACY_DOORPASS_COOKIE);
+          return redirectRes;
+        }
+        // Jika sudah di /admin/login dengan doorpass valid, izinkan render
+        const nextRes = NextResponse.next();
+        nextRes.cookies.delete(LEGACY_DOORPASS_COOKIE);
+        return nextRes;
+      } else {
+        // Doorpass salah -> 404 Not Found!
+        return send404();
+      }
     }
 
-    // KONDISI 3 & 4: Doorpass SUDAH Terbuka
+    // KONDISI 2: TIDAK ada doorpass di URL (misal pengunjung hanya mengetik /admin atau /admin/login)
+    // Cek apakah user SUDAH login dan memiliki cookie session doorpass yang sah
+    const doorpassSessionCookie = request.cookies.get(DOORPASS_SESSION_COOKIE)?.value;
+    const isDoorpassSessionValid = await verifyDoorpassSessionToken(
+      doorpassSessionCookie,
+      secretDoorpass
+    );
+
     // Inisialisasi Supabase SSR untuk memeriksa sesi autentikasi
     let supabaseResponse = NextResponse.next({ request });
+    supabaseResponse.cookies.delete(LEGACY_DOORPASS_COOKIE);
 
     let user = null;
     try {
@@ -98,25 +98,20 @@ export async function middleware(request: NextRequest) {
       console.error('Supabase middleware auth check warning:', authErr);
     }
 
-    // Jika user sudah terautentikasi:
-    if (user) {
-      // Jika mencoba membuka /admin atau /admin/login saat sudah login, bawa ke dashboard proyek
+    // Jika user SUDAH login dan memiliki sesi doorpass yang valid dengan password .env saat ini:
+    if (user && isDoorpassSessionValid) {
+      // Jika mencoba membuka /admin atau /admin/login saat sudah login, bawa langsung ke dashboard proyek
       if (pathname === '/admin' || pathname === '/admin/login') {
         return NextResponse.redirect(new URL('/admin/proyek', request.url));
       }
       return supabaseResponse;
     }
 
-    // Jika belum login (user == null):
-    if (pathname === '/admin/login') {
-      return supabaseResponse;
-    }
-
-    // Jika mencoba akses /admin/proyek atau sub-admin lain tanpa login: arahkan ke /admin/login
-    return NextResponse.redirect(new URL('/admin/login', request.url));
+    // Jika BELUM login atau sesi doorpass tidak cocok dengan password saat ini:
+    // WAJIB ditolak ke 404! (Mengetik /admin doang tidak akan pernah membuka login)
+    return send404();
   } catch (err) {
     console.error('CRITICAL middleware error caught:', err);
-    // Fail-safe mutlak agar Vercel tidak pernah mengembalikan 500 MIDDLEWARE_INVOCATION_FAILED
     return NextResponse.next();
   }
 }
@@ -124,3 +119,4 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: ['/admin/:path*'],
 };
+

@@ -1,13 +1,13 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { projects } from '@/data';
+import { projects } from '@/lib/constants';
 import { ArrowLeft, CheckCircle2, ExternalLink, Layers, Sparkles } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa6';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Metadata } from 'next';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase/client';
 
 // Dynamic Route: app/proyek/[id]/page.tsx (Modul 02 Step 7 & Modul 03)
 interface ProyekDetailPageProps {

@@ -1,19 +1,23 @@
 import { redirect, notFound } from 'next/navigation';
-import { createSupabaseServerClient } from '@/lib/supabase-server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
+import { getDoorpassSecret } from '@/lib/doorpass/core';
+import { setDoorpassUnlockedAction, revokeDoorpassAction } from '@/lib/doorpass/actions';
 
 async function loginAction(formData: FormData) {
   'use server';
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const doorpass = formData.get('doorpass') as string;
+  const doorpass = (formData.get('doorpass') as string || '').trim();
 
-  const secretDoorpass = (
-    process.env.ADMIN_DOORPASS ||
-    process.env.NEXT_PUBLIC_ADMIN_DOORPASS ||
-    'figmap'
-  ).trim();
+  const secretDoorpass = getDoorpassSecret();
+
+  // Jika doorpass yang dikirim form tidak sesuai dengan env -> tolak mutlak
+  if (!doorpass || doorpass !== secretDoorpass) {
+    await revokeDoorpassAction();
+    redirect('/not-found');
+  }
 
   const supabase = await createSupabaseServerClient();
   const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -24,7 +28,7 @@ async function loginAction(formData: FormData) {
   if (authError || !authData.user) {
     console.error('Supabase Auth Error:', authError);
     const errorMsg = authError?.message || 'Kredensial tidak valid';
-    redirect(`/admin/login?doorpass=${encodeURIComponent(doorpass || secretDoorpass)}&error=${encodeURIComponent(errorMsg)}`);
+    redirect(`/admin/login?doorpass=${encodeURIComponent(secretDoorpass)}&error=${encodeURIComponent(errorMsg)}`);
   }
 
   // 1. Verifikasi Role Admin dari tabel 'profiles'
@@ -38,19 +42,12 @@ async function loginAction(formData: FormData) {
   if (profileError || !profile || profile.role !== 'admin') {
     console.error('Profile Verification Error:', { profile, profileError });
     await supabase.auth.signOut();
-    const cookieStore = await cookies();
-    cookieStore.delete('admin_doorpass_unlocked');
-    redirect(`/admin/login?doorpass=${encodeURIComponent(doorpass || secretDoorpass)}&error=Akses+ditolak:+Akun+Anda+bukan+admin`);
+    await revokeDoorpassAction();
+    redirect(`/admin/login?doorpass=${encodeURIComponent(secretDoorpass)}&error=Akses+ditolak:+Akun+Anda+bukan+admin`);
   }
 
-  // Aktifkan cookie izin doorpass untuk admin yang berhasil login
-  const cookieStore = await cookies();
-  cookieStore.set('admin_doorpass_unlocked', 'true', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-  });
+  // Aktifkan sesi doorpass terenkripsi hash SHA-256 untuk admin yang berhasil login
+  await setDoorpassUnlockedAction(secretDoorpass);
 
   redirect('/admin/proyek');
 }
@@ -61,18 +58,12 @@ export default async function AdminLoginPage({
   searchParams: Promise<{ doorpass?: string; error?: string }>;
 }) {
   const params = await searchParams;
-  const secretDoorpass = (
-    process.env.ADMIN_DOORPASS ||
-    process.env.NEXT_PUBLIC_ADMIN_DOORPASS ||
-    'figmap'
-  ).trim();
+  const secretDoorpass = getDoorpassSecret();
 
-  const cookieStore = await cookies();
-  const isCookieUnlocked = cookieStore.get('admin_doorpass_unlocked')?.value === 'true';
   const isParamValid = Boolean(params.doorpass && params.doorpass.trim() === secretDoorpass);
 
-  // Jika doorpass di URL tidak cocok DAN cookie doorpass juga belum dibuka -> 404!
-  if (!isParamValid && !isCookieUnlocked) {
+  // Jika doorpass di URL tidak ada atau tidak cocok persis dengan env -> 404 Not Found!
+  if (!isParamValid) {
     notFound();
   }
 
@@ -98,7 +89,7 @@ export default async function AdminLoginPage({
           <input
             type="hidden"
             name="doorpass"
-            value={params.doorpass || (isCookieUnlocked ? secretDoorpass : '')}
+            value={params.doorpass || ''}
           />
           <div>
             <label

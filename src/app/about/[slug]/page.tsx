@@ -3,10 +3,10 @@ export const revalidate = 0;
 
 import Image from 'next/image'
 import Link from 'next/link'
-import SectionHeading from '@/components/helper/SectionHeading'
+import SectionHeading from '@/components/common/SectionHeading'
 import { cn } from '@/lib/utils'
-import { favoriteActivities, goals, learningNow } from '@/data'
-import About from '@/components/Home/About/About'
+import { favoriteActivities, goals, learningNow } from '@/lib/constants'
+import About from '@/components/sections/About'
 import { ArrowLeft } from 'lucide-react'
 
 export default function AboutDetailPage() {

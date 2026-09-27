@@ -23,13 +23,13 @@ Portofolio web modern, responsif, dan interaktif yang dibangun menggunakan **Nex
 
 ## 🌟 1. Dokumentasi Penambahan Fitur (Features)
 
-### A. Rute Dinamis Proyek (`project/[id]` & `projects/[slug]`)
-* Memungkinkan setiap proyek memiliki halaman detail spesifik yang diakses berdasarkan identifier unik (`id` numerik seperti `/project/1` maupun `slug` semantik seperti `/project/management-siswa`).
+### A. Rute Dinamis Proyek (`proyek/[id]` & `proyek/[slug]`)
+* Memungkinkan setiap proyek memiliki halaman detail spesifik yang diakses berdasarkan identifier unik (`id` numerik seperti `/proyek/1` maupun `slug` semantik seperti `/proyek/management-siswa`).
 * Menerapkan standar terbaru **Next.js 15+** di mana `params` diakses secara *asynchronous* (`await params`).
 * Dilengkapi dengan fungsi `notFound()` untuk mengarahkan pengguna secara otomatis ke halaman error kustom jika ID proyek tidak valid.
 
-### B. Filter Katalog Berbasis `searchParams` (`/project?category=...`)
-* Halaman katalog karya kejuruan pada rute `/project` dan `/proyek` mendukung penyaringan dinamis menggunakan URL Query String (`searchParams`).
+### B. Filter Katalog Berbasis `searchParams` (`/proyek?kategori=...`)
+* Halaman katalog karya kejuruan pada rute `/proyek` mendukung penyaringan dinamis menggunakan URL Query String (`searchParams`).
 * Kategori yang tersedia: `Semua`, `Web`, `Mobile`, dan `IoT`.
 * Bersifat *Server Component friendly* sehingga tidak memerlukan JavaScript berlebih di client untuk filter data; URL dapat di-share langsung dengan status filter yang aktif.
 
@@ -47,6 +47,11 @@ Portofolio web modern, responsif, dan interaktif yang dibangun menggunakan **Nex
 
 ### F. Dark & Light Mode Theme Switcher
 * Menggunakan pustaka `next-themes` untuk perpindahan tema instan yang tersinkronisasi dengan preferensi sistem operasi pengguna.
+
+### G. Panel Menu Admin & Full CRUD Studio CMS (`/admin`)
+* Dilengkapi antarmuka manajemen konten khusus dengan sistem proteksi keamanan **Secret Doorpass** (`/admin?doorpass=figmap`), autentikasi Supabase Auth, dan verifikasi role admin via tabel `profiles`.
+* Menyediakan **Mode Live Studio** (visual homepage interaktif dengan tombol aksi Edit/Hapus pada kartu) dan **Mode Tabel Data Klasik**.
+* **Operasi Full CRUD (Create, Read, Update, Delete)** untuk data Proyek dan linimasa Road Pengalaman via Next.js Server Actions dengan revalidasi instan.
 
 ---
 
@@ -80,6 +85,14 @@ src/
 │   ├── layout.tsx                     # Root layout aplikasi (Navbar, Footer, Providers)
 │   ├── page.tsx                       # Halaman utama (One-Page Scroll Sections)
 │   ├── not-found.tsx                  # Halaman 404 kustom
+│   ├── admin/                         # Area CMS Admin Panel & CRUD
+│   │   ├── layout.tsx                 # Layout admin terproteksi, header & tombol logout
+│   │   ├── page.tsx                   # Redirect otomatis ke /admin/proyek
+│   │   ├── login/                     # Halaman autentikasi login admin Supabase
+│   │   └── proyek/                    # Panel Live Studio CMS & Mode Tabel CRUD
+│   │       ├── actions.ts             # Server Actions CRUD (Create, Update, Delete)
+│   │       ├── page.tsx               # Server Component data fetcher Supabase
+│   │       └── ProyekTableClient.tsx  # Client UI (Live Studio & Table View)
 │   ├── proyek/
 │   │   ├── page.tsx                   # Katalog proyek (Supabase + filter searchParams)
 │   │   └── [id]/
@@ -112,10 +125,10 @@ src/
 
 ---
 
-## 🛣️ 4. Dokumentasi Rute Dinamis `project/[id]`
+## 🛣️ 4. Dokumentasi Rute Dinamis `proyek/[id]`
 
 Rute dinamis diimplementasikan pada file:
-👉 **[`src/app/project/[id]/page.tsx`](file:///d:/project%20rpl/next%20js%20kali/nextjs-portofolio/src/app/project/[id]/page.tsx)**
+👉 **[`src/app/proyek/[id]/page.tsx`](file:///d:/project%20rpl/next%20js%20kali/nextjs-portofolio/src/app/proyek/[id]/page.tsx)**
 
 ### Cara Kerja:
 1. **Async Params Resolution (Next.js 15 Standard):**

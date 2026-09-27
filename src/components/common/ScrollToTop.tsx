@@ -1,9 +1,12 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ArrowUp } from 'lucide-react';
 
 const ScrollToTop = () => {
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -15,6 +18,11 @@ const ScrollToTop = () => {
     window.addEventListener("scroll", toggleVisibility);
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
+
+  // Sembunyikan tombol ScrollToTop pada rute admin atau not-found
+  if (pathname?.startsWith('/admin') || pathname === '/not-found') {
+    return null;
+  }
 
   const scrollToTop = () => {
     window.scrollTo({

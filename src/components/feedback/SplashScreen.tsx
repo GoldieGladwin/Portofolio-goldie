@@ -1,83 +1,110 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import AOS from 'aos';
 
+// Flag sesi runtime halaman di browser:
+// Bernilai true setelah splash pertama kali selesai atau jika dibuka di halaman admin.
+// Akan ter-reset HANYA jika halaman di-refresh (F5 / full reload) atau tab baru dibuka.
+let hasShownSplashInSession = false;
+
+function isExcludedPath(pathname: string | null): boolean {
+  if (!pathname) return false;
+  if (pathname.startsWith('/admin')) return true;
+  if (pathname === '/not-found') return true;
+  if (typeof window !== 'undefined') {
+    const loc = window.location.pathname;
+    if (loc.startsWith('/admin') || loc === '/not-found') return true;
+    if (document.querySelector('[data-hide-nav="true"]')) return true;
+  }
+  return false;
+}
+
 export default function SplashScreen() {
   const pathname = usePathname();
-  const isAdmin = pathname?.startsWith('/admin');
 
-  const [progress, setProgress] = useState(0);
+  // 1. Deteksi rute admin (/admin, /admin/login, dsb) atau halaman 404
+  const isExcluded = isExcludedPath(pathname);
+
+  // 2. Jika rute dikecualikan atau sudah pernah tampil di sesi runtime ini -> jangan tampilkan
+  const shouldSkip = hasShownSplashInSession || isExcluded;
+
+  const [mounted, setMounted] = useState(false);
+  const [progress, setProgress] = useState(12);
   const [isOpening, setIsOpening] = useState(false);
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState(shouldSkip);
+
+  // Gunakan ref agar ticker animasi tidak terganggu oleh re-render
+  const isFinishedRef = useRef(false);
 
   useEffect(() => {
-    // Lewati splash screen di route admin
-    if (isAdmin) {
+    // Jika rute admin, 404, atau sudah pernah muncul -> lewati mutlak & pastikan scroll normal
+    if (
+      hasShownSplashInSession ||
+      isExcludedPath(pathname) ||
+      (typeof window !== 'undefined' && (
+        window.location.pathname.startsWith('/admin') ||
+        window.location.pathname === '/not-found' ||
+        Boolean(document.querySelector('[data-hide-nav="true"]'))
+      ))
+    ) {
+      hasShownSplashInSession = true;
+      setIsDone(true);
+      document.body.style.overflow = '';
+      const stray = document.getElementById('splash-screen');
+      if (stray) stray.remove();
       return;
     }
 
-    // Langsung beri progress awal agar tidak kelihatan freeze di 0%
-    setProgress(12);
+    setMounted(true);
 
-    // Kunci scroll sementara saat splash screen loading
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
     const startTime = Date.now();
-    const targetDuration = 800; // Durasi cepat & snappy (~0.8 detik)
+    const targetDuration = 650; // Cepat, responsif & mulus (~0.65 detik)
 
     let animationFrameId: number | null = null;
-    let intervalId: NodeJS.Timeout | null = null;
     let openTimer: NodeJS.Timeout | null = null;
     let doneTimer: NodeJS.Timeout | null = null;
     let safetyTimer: NodeJS.Timeout | null = null;
-    let isFinished = false;
 
     const triggerOpen = () => {
-      if (isFinished) return;
-      isFinished = true;
+      if (isFinishedRef.current) return;
+      isFinishedRef.current = true;
 
-      if (intervalId) clearInterval(intervalId);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       if (safetyTimer) clearTimeout(safetyTimer);
 
       setProgress(100);
+      document.body.style.overflow = originalOverflow || '';
 
-      // Beri tanda data-opened pada elemen splash agar fail-safe script tahu sudah beres
-      const el = document.getElementById('splash-screen');
-      if (el) el.setAttribute('data-opened', 'true');
-
-      // Jeda sangat singkat (100ms) lalu buka tirai atas & bawah
+      // Buka tirai setelah jeda singkat
       openTimer = setTimeout(() => {
         setIsOpening(true);
-        document.body.style.overflow = originalOverflow || '';
-      }, 100);
+      }, 50);
 
-      // Setelah animasi tirai selesai (650ms), unmount komponen & refresh AOS
+      // Selesaikan & unmount setelah animasi tirai slide selesai
       doneTimer = setTimeout(() => {
+        hasShownSplashInSession = true;
         setIsDone(true);
         try {
           if (typeof window !== 'undefined' && AOS && typeof AOS.refresh === 'function') {
             AOS.refresh();
           }
         } catch {
-          // Abaikan jika AOS belum terinisialisasi
+          // ignore
         }
-      }, 750);
+      }, 650);
     };
 
-    // Update persentase berbasis waktu nyata Date.now()
     const tick = () => {
-      if (isFinished) return;
+      if (isFinishedRef.current) return;
       const elapsed = Date.now() - startTime;
       const fraction = Math.min(elapsed / targetDuration, 1);
-
-      // Easing out cubic agar laju persentase alami dan mulus
       const easeVal = Math.round((1 - Math.pow(1 - fraction, 3)) * 100);
-      const currentVal = Math.max(12, easeVal);
-      setProgress((prev) => Math.max(prev, currentVal));
+      setProgress((prev) => Math.max(prev, Math.max(12, easeVal)));
 
       if (fraction >= 1) {
         triggerOpen();
@@ -86,39 +113,27 @@ export default function SplashScreen() {
       }
     };
 
-    // Jalankan ticker RAF
     animationFrameId = requestAnimationFrame(tick);
 
-    // Interval backup (setiap 25ms) agar tetap jalan jika RAF di-throttle browser
-    intervalId = setInterval(() => {
-      if (isFinished) return;
-      const elapsed = Date.now() - startTime;
-      if (elapsed >= targetDuration) {
-        triggerOpen();
-      } else {
-        const fraction = elapsed / targetDuration;
-        const easeVal = Math.round((1 - Math.pow(1 - fraction, 3)) * 100);
-        setProgress((prev) => Math.max(prev, Math.max(12, easeVal)));
-      }
-    }, 25);
-
-    // FAIL-SAFE MUTLAK: Maksimal 1.3 detik splash screen WAJIB terbuka & scroll dibuka
+    // Fail-safe mutlak: Maksimal 900ms WAJIB selesai & scroll dibuka
     safetyTimer = setTimeout(() => {
       triggerOpen();
-    }, 1300);
+    }, 900);
 
     return () => {
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      if (intervalId) clearInterval(intervalId);
       if (openTimer) clearTimeout(openTimer);
       if (doneTimer) clearTimeout(doneTimer);
       if (safetyTimer) clearTimeout(safetyTimer);
       document.body.style.overflow = originalOverflow || '';
+      hasShownSplashInSession = true;
     };
-  }, [isAdmin]);
+  }, [pathname]);
 
-  // Jika di halaman admin atau sudah selesai animasi, unmount sepenuhnya
-  if (isAdmin || isDone) return null;
+  // JANGAN render apa pun jika diskip, belum mounted di client, atau sudah selesai
+  if (shouldSkip || !mounted || isDone) {
+    return null;
+  }
 
   return (
     <div

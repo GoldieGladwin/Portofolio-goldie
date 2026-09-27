@@ -1,8 +1,31 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { aboutMe, footerSocialLinks } from '@/lib/constants';
 import { Moon } from 'lucide-react';
 
 const Footer = () => {
+  const pathname = usePathname();
+  const [is404Page, setIs404Page] = useState(false);
+
+  useEffect(() => {
+    const check404 = () => {
+      const has404 = Boolean(document.querySelector('[data-hide-nav="true"]'));
+      setIs404Page(has404);
+    };
+
+    check404();
+    const timer = setTimeout(check404, 50);
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  // Sembunyikan footer jika sedang di rute admin (/admin, /admin/login, dsb),
+  // atau rute /not-found, atau halaman 404
+  if (pathname?.startsWith('/admin') || pathname === '/not-found' || is404Page) {
+    return null;
+  }
+
   return (
     <footer className="border-t bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 py-12">
       <div className="w-[80%] mx-auto">

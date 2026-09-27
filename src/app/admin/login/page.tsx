@@ -12,7 +12,7 @@ async function loginAction(formData: FormData) {
   const secretDoorpass = (
     process.env.ADMIN_DOORPASS ||
     process.env.NEXT_PUBLIC_ADMIN_DOORPASS ||
-    'rahasia-admin'
+    'figmap'
   ).trim();
 
   const supabase = await createSupabaseServerClient();
@@ -64,7 +64,7 @@ export default async function AdminLoginPage({
   const secretDoorpass = (
     process.env.ADMIN_DOORPASS ||
     process.env.NEXT_PUBLIC_ADMIN_DOORPASS ||
-    'rahasia-admin'
+    'figmap'
   ).trim();
 
   const cookieStore = await cookies();

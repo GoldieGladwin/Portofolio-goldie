@@ -9,6 +9,7 @@ export interface Proyek {
   fitur_kunci?: string[];
   teknologi: string[];
   gambar_url: string;
+  image?: string | null;
   link_github?: string;
   link_demo?: string;
   link_deploy?: string;

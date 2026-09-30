@@ -25,12 +25,14 @@ const ProjectCard = ({
   demoUrl,
   githubUrl,
 }: Props) => {
+  const projectImg = image || '/images/managemens.png';
+
   return (
     <div className="group relative bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex flex-col h-full">
       {/* image container */}
       <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-700">
         <Image
-          src={image}
+          src={projectImg}
           alt={title}
           width={400}
           height={400}

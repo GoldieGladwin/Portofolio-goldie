@@ -18,7 +18,11 @@ import {
   LayoutGrid,
   Table as TableIcon,
   Eye,
-  Settings
+  Settings,
+  Image as ImageIcon,
+  Upload,
+  Link as LinkIcon,
+  Check
 } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa6';
 import { cn } from '@/lib/utils';
@@ -65,6 +69,296 @@ export type PengalamanItem = {
   teknologi: string;
   created_at?: string;
 };
+
+const PRESET_THUMBNAILS = [
+  { label: 'School Admin', url: '/images/managemens.png' },
+  { label: 'Internship System', url: '/images/managementm.png' },
+  { label: 'Game Rental', url: '/images/pinjam.png' },
+  { label: 'Developer App', url: '/images/My app.png' },
+  { label: 'Coding Workspace', url: '/images/coding.jpg' },
+  { label: 'Study & Reading', url: '/images/reading.jpg' },
+];
+
+interface ThumbnailPickerProps {
+  initialImage?: string | null;
+}
+
+function ThumbnailPicker({ initialImage }: ThumbnailPickerProps) {
+  const [preview, setPreview] = useState<string | null>(initialImage || null);
+  const [tab, setTab] = useState<'upload' | 'url' | 'presets'>('upload');
+  const [urlInput, setUrlInput] = useState<string>(initialImage || '');
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileSize, setFileSize] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Sinkronisasi jika initialImage berubah (misal ganti proyek yang diedit)
+  useEffect(() => {
+    setPreview(initialImage || null);
+    setUrlInput(initialImage || '');
+    setFileName(null);
+    setFileSize(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }, [initialImage]);
+
+  const handleFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Mohon pilih file gambar (JPG, PNG, WebP, SVG).');
+      return;
+    }
+    const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Ukuran file maksimal 10MB.');
+      return;
+    }
+    setFileName(file.name);
+    setFileSize(`${sizeInMB} MB`);
+    const objectUrl = URL.createObjectURL(file);
+    setPreview(objectUrl);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFile(file);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      if (fileInputRef.current) {
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInputRef.current.files = dataTransfer.files;
+      }
+      handleFile(file);
+    }
+  };
+
+  const handleUrlChange = (val: string) => {
+    setUrlInput(val);
+    setPreview(val.trim() || null);
+    setFileName(null);
+    setFileSize(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleSelectPreset = (url: string) => {
+    setUrlInput(url);
+    setPreview(url);
+    setFileName(null);
+    setFileSize(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleRemove = () => {
+    setPreview(null);
+    setUrlInput('');
+    setFileName(null);
+    setFileSize(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+      <div className="flex items-center justify-between">
+        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+          Foto Thumbnail Proyek
+        </label>
+        {preview && (
+          <button
+            type="button"
+            onClick={handleRemove}
+            className="text-[11px] font-medium text-red-500 hover:text-red-700 dark:hover:text-red-400 flex items-center gap-1 cursor-pointer transition-colors"
+          >
+            <Trash2 className="w-3 h-3" />
+            Hapus Foto
+          </button>
+        )}
+      </div>
+
+      {/* Live Preview Box */}
+      {preview ? (
+        <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-900 group shadow-sm">
+          <div className="relative w-full h-40 sm:h-44 bg-slate-950 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={preview}
+              alt="Thumbnail Preview"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/images/managemens.png';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white pointer-events-none">
+              <span className="text-[11px] font-medium bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-lg border border-white/10 truncate max-w-[200px]">
+                {fileName ? fileName : preview.startsWith('http') ? 'URL Online' : 'Aset Portfolio'}
+              </span>
+              <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md">
+                <CheckCircle2 className="w-3 h-3" /> Siap Digunakan
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="h-24 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-850 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 gap-1 p-3 text-center">
+          <ImageIcon className="w-6 h-6 opacity-60 text-slate-400" />
+          <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+            Belum ada foto thumbnail dipilih
+          </p>
+          <p className="text-[11px] text-slate-400 dark:text-slate-500">
+            Pilih opsi di bawah untuk mengunggah atau memilih gambar
+          </p>
+        </div>
+      )}
+
+      {/* Mode Selection Tabs */}
+      <div className="flex rounded-xl bg-slate-200/70 dark:bg-slate-900 p-1 gap-1">
+        <button
+          type="button"
+          onClick={() => setTab('upload')}
+          className={cn(
+            "flex-1 py-1 px-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer",
+            tab === 'upload'
+              ? "bg-white dark:bg-slate-750 text-indigo-600 dark:text-indigo-300 shadow-xs"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          )}
+        >
+          <Upload className="w-3.5 h-3.5" />
+          <span>Unggah File</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setTab('url')}
+          className={cn(
+            "flex-1 py-1 px-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer",
+            tab === 'url'
+              ? "bg-white dark:bg-slate-750 text-indigo-600 dark:text-indigo-300 shadow-xs"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          )}
+        >
+          <LinkIcon className="w-3.5 h-3.5" />
+          <span>Input URL</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setTab('presets')}
+          className={cn(
+            "flex-1 py-1 px-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer",
+            tab === 'presets'
+              ? "bg-white dark:bg-slate-750 text-indigo-600 dark:text-indigo-300 shadow-xs"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          )}
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Galeri Bawaan</span>
+        </button>
+      </div>
+
+      {/* Tab 1: Upload File */}
+      {tab === 'upload' && (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+          className={cn(
+            "border-2 border-dashed rounded-xl p-3 text-center cursor-pointer transition-all",
+            isDragging
+              ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950/40"
+              : "border-slate-300 hover:border-indigo-400 dark:border-slate-700 dark:hover:border-indigo-500 bg-white dark:bg-slate-850"
+          )}
+        >
+          <input
+            ref={fileInputRef}
+            type="file"
+            name="image_file"
+            accept="image/png,image/jpeg,image/webp,image/jpg,image/svg+xml,image/gif"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          <Upload className="w-5 h-5 mx-auto mb-1 text-indigo-500" />
+          <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+            {fileName ? `File terpilih: ${fileName}` : 'Klik untuk pilih foto atau seret foto ke sini'}
+          </p>
+          <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+            Mendukung PNG, JPG, WEBP (Maksimal 10MB)
+          </p>
+        </div>
+      )}
+
+      {/* Tab 2: Input URL */}
+      {tab === 'url' && (
+        <div className="space-y-1">
+          <div className="relative">
+            <input
+              type="text"
+              value={urlInput}
+              onChange={(e) => handleUrlChange(e.target.value)}
+              placeholder="https://... atau /images/namagambar.png"
+              className="w-full text-xs border border-slate-300 dark:border-slate-700 dark:bg-slate-800 rounded-xl pl-8 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-white"
+            />
+            <LinkIcon className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" />
+          </div>
+          <p className="text-[11px] text-slate-500">
+            URL gambar web (Unsplash, Supabase) atau path lokal di /images/
+          </p>
+        </div>
+      )}
+
+      {/* Tab 3: Presets */}
+      {tab === 'presets' && (
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+          {PRESET_THUMBNAILS.map((item) => (
+            <button
+              key={item.url}
+              type="button"
+              onClick={() => handleSelectPreset(item.url)}
+              title={item.label}
+              className={cn(
+                "relative rounded-lg overflow-hidden border-2 aspect-video group cursor-pointer transition-all",
+                preview === item.url
+                  ? "border-indigo-600 ring-2 ring-indigo-500/30 scale-102"
+                  : "border-slate-200 dark:border-slate-700 hover:border-indigo-400"
+              )}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.url}
+                alt={item.label}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+              />
+              {preview === item.url && (
+                <div className="absolute inset-0 bg-indigo-600/50 flex items-center justify-center text-white">
+                  <Check className="w-3.5 h-3.5" />
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Hidden input agar URL / preset / path terpilih terkirim di FormData */}
+      <input
+        type="hidden"
+        name="image"
+        value={preview?.startsWith('blob:') ? '' : (urlInput || '')}
+      />
+    </div>
+  );
+}
 
 type Props = {
   initialProyek: ProyekItem[];
@@ -644,6 +938,7 @@ export default function ProyekTableClient({
               <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th className="px-5 py-3 w-12 text-center">No</th>
+                  <th className="px-4 py-3 w-20 text-center">Foto</th>
                   <th className="px-5 py-3">Judul Proyek</th>
                   <th className="px-5 py-3">Kategori</th>
                   <th className="px-5 py-3">Teknologi</th>
@@ -654,6 +949,19 @@ export default function ProyekTableClient({
                 {initialProyek.map((proyek, index) => (
                   <tr key={proyek.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
                     <td className="px-5 py-3 text-center text-xs text-slate-400">{index + 1}</td>
+                    <td className="px-4 py-3 text-center">
+                      <div className="w-14 h-10 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 mx-auto relative group shadow-2xs">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={proyek.image || '/images/managemens.png'}
+                          alt={proyek.judul}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/images/managemens.png';
+                          }}
+                        />
+                      </div>
+                    </td>
                     <td className="px-5 py-3 font-semibold text-slate-900 dark:text-white">{proyek.judul}</td>
                     <td className="px-5 py-3 text-xs text-slate-500">{proyek.kategori || 'Web'}</td>
                     <td className="px-5 py-3 text-xs text-slate-500">{proyek.teknologi}</td>
@@ -687,9 +995,9 @@ export default function ProyekTableClient({
       {/* 🛑 POP UP MODAL 1: TAMBAH PROYEK BARU */}
       {/* ========================================================================= */}
       {isAddProyekOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden my-auto max-h-[92vh] flex flex-col">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850 shrink-0">
               <div className="flex items-center gap-2">
                 <Plus className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 <h3 className="font-bold text-slate-800 dark:text-white text-base">Tambah Proyek Baru</h3>
@@ -703,7 +1011,7 @@ export default function ProyekTableClient({
               </button>
             </div>
 
-            <form onSubmit={handleTambahProyekSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleTambahProyekSubmit} className="p-6 space-y-4 overflow-y-auto">
               {errorMessage && (
                 <div className="p-3 text-xs bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-xl border border-red-200 dark:border-red-900/60">
                   {errorMessage}
@@ -722,6 +1030,9 @@ export default function ProyekTableClient({
                   className="w-full text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-white"
                 />
               </div>
+
+              {/* 📷 INPUT & UPLOAD FOTO THUMBNAIL PROYEK */}
+              <ThumbnailPicker />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -819,9 +1130,9 @@ export default function ProyekTableClient({
       {/* 🛑 POP UP MODAL 2: EDIT PROYEK */}
       {/* ========================================================================= */}
       {editingProyek && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden my-auto max-h-[92vh] flex flex-col">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850 shrink-0">
               <div className="flex items-center gap-2">
                 <Pencil className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <h3 className="font-bold text-slate-800 dark:text-white text-base">Edit Proyek</h3>
@@ -835,7 +1146,7 @@ export default function ProyekTableClient({
               </button>
             </div>
 
-            <form onSubmit={handleEditProyekSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleEditProyekSubmit} className="p-6 space-y-4 overflow-y-auto">
               <input type="hidden" name="id" value={editingProyek.id} />
 
               {errorMessage && (
@@ -856,6 +1167,9 @@ export default function ProyekTableClient({
                   className="w-full text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
                 />
               </div>
+
+              {/* 📷 INPUT & UPLOAD FOTO THUMBNAIL PROYEK */}
+              <ThumbnailPicker initialImage={editingProyek.image} />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

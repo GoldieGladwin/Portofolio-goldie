@@ -306,3 +306,40 @@ BEGIN
     ON CONFLICT (id) DO UPDATE SET role = 'admin';
   END IF;
 END $$;
+
+-- ------------------------------------------------------------------------------
+-- 7. SUPABASE STORAGE: BUCKET 'proyek' UNTUK FOTO THUMBNAIL (OPSIONAL / CLOUD STORAGE)
+-- ------------------------------------------------------------------------------
+-- Menambahkan bucket 'proyek' dengan akses publik agar foto thumbnail proyek
+-- dapat diakses langsung oleh pengunjung website.
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('proyek', 'proyek', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- Policy 1: Siapapun (publik) boleh membaca / menampilkan foto proyek
+DROP POLICY IF EXISTS "Public Access Proyek Bucket" ON storage.objects;
+CREATE POLICY "Public Access Proyek Bucket"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'proyek');
+
+-- Policy 2: User admin / authenticated boleh mengunggah foto baru
+DROP POLICY IF EXISTS "Authenticated Upload Proyek Bucket" ON storage.objects;
+CREATE POLICY "Authenticated Upload Proyek Bucket"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (bucket_id = 'proyek');
+
+-- Policy 3: User admin boleh memperbarui foto
+DROP POLICY IF EXISTS "Authenticated Update Proyek Bucket" ON storage.objects;
+CREATE POLICY "Authenticated Update Proyek Bucket"
+ON storage.objects FOR UPDATE
+TO authenticated
+USING (bucket_id = 'proyek');
+
+-- Policy 4: User admin boleh menghapus foto
+DROP POLICY IF EXISTS "Authenticated Delete Proyek Bucket" ON storage.objects;
+CREATE POLICY "Authenticated Delete Proyek Bucket"
+ON storage.objects FOR DELETE
+TO authenticated
+USING (bucket_id = 'proyek');
+

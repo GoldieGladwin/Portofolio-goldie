@@ -6,6 +6,7 @@ import ResponsiveNav from "@/components/layout/ResponsiveNav";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import AosInitializer from "@/components/common/AosInitializer";
+import SplashScreen from "@/components/feedback/SplashScreen";
 
 const font = Inter({
   subsets: ["latin"],
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={`min-h-full flex flex-col ${font.className}`}>
         <Provider>
+          <SplashScreen />
           <AosInitializer />
           <ResponsiveNav />
           {children}

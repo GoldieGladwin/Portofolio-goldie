@@ -1,20 +1,43 @@
 'use client';
 
 import SectionHeading from '@/components/common/SectionHeading';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { ArrowRight } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { aboutMe, highlights, stats } from '@/lib/constants';
-import Lanyard from '@/components/visual/Lanyard';
 import CounterApresiasi from './CounterApresiasi';
+
+// Dynamic import Lanyard agar bundle Three.js/Rapier di-load secara asinkron tanpa membebani load awal
+const Lanyard = dynamic(() => import('@/components/visual/Lanyard'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full rounded-2xl flex items-center justify-center bg-slate-200/50 dark:bg-gray-800/50">
+      <div className="w-8 h-8 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
+    </div>
+  ),
+});
 
 type AboutProps = {
   showDetailLink?: boolean;
 };
 
 const About = ({ showDetailLink = true }: AboutProps) => {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div id="about" className="py-8 sm:py-12 md:py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24">
       {/* section heading */}
@@ -27,23 +50,47 @@ const About = ({ showDetailLink = true }: AboutProps) => {
       </div>
 
       <div className="grid w-[94%] sm:w-[90%] max-w-6xl mx-auto grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-        {/* 3D Lanyard Card */}
+        {/* Card Foto / 3D Lanyard */}
         <div
           data-aos="fade-right"
           data-aos-duration="650"
           data-aos-anchor-placement="top-bottom"
-          className="relative w-full max-w-[500px] lg:max-w-[600px] h-[260px] sm:h-[360px] md:h-[400px] lg:h-auto lg:aspect-square mx-auto"
+          className="relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[600px] h-[360px] sm:h-[440px] md:h-[460px] lg:h-auto lg:aspect-square mx-auto flex items-center justify-center"
         >
-          <div className="h-full w-full rounded-2xl p-2 overflow-visible">
-            <Lanyard
-              position={[0, 0, 7]}
-              gravity={[0, -40, 0]}
-              fov={20}
-              frontImage="/images/Gold.jpg"
-              backImage="/images/gold-back.jpg"
-              imageFit="cover"
-            />
-          </div>
+          {isDesktop ? (
+            /* Desktop: 3D Lanyard interaktif */
+            <div className="h-full w-full rounded-2xl p-2 overflow-visible">
+              <Lanyard
+                position={[0, 0, 7]}
+                gravity={[0, -40, 0]}
+                fov={20}
+                frontImage="/images/Gold.jpg"
+                backImage="/images/gold-back.jpg"
+                imageFit="cover"
+              />
+            </div>
+          ) : (
+            /* Mobile & Tablet: Kartu Foto Profil Ringan & Elegan (0% beban GPU/WASM) */
+            <div className="relative w-full h-full max-h-[420px] rounded-3xl overflow-hidden border-2 border-slate-200 dark:border-gray-700 shadow-xl bg-white dark:bg-gray-800 group">
+              <Image
+                src="/images/Gold.jpg"
+                alt="Foto Profil Siswa Goldie Gladwin"
+                fill
+                priority
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 640px) 340px, 420px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
+              <div className="absolute bottom-5 left-5 right-5 text-white">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-600/90 backdrop-blur-md text-[11px] font-semibold uppercase tracking-wider mb-2 shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  SMK RPL • Full Stack Developer
+                </div>
+                <h4 className="text-xl font-bold tracking-tight">Goldie Gladwin</h4>
+                <p className="text-xs text-slate-300">Software Engineering Student &amp; Web Developer</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Content */}

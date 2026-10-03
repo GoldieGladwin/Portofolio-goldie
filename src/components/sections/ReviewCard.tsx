@@ -25,7 +25,7 @@ const ReviewCard = ({ user }: Props) => {
       <div className="flex items-center space-x-4">
         <Image
           src={user.userImage}
-          alt={user.name}
+          alt={`Foto profil ulasan dari ${user.name}`}
           width={50}
           height={50}
           className="rounded-full object-cover"

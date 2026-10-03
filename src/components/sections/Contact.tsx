@@ -152,11 +152,10 @@ const Contact = () => {
               {status && (
                 <div
                   role="status"
-                  className={`flex items-start gap-2.5 p-4 rounded-xl text-xs sm:text-sm font-medium border ${
-                    status.type === 'success'
+                  className={`flex items-start gap-2.5 p-4 rounded-xl text-xs sm:text-sm font-medium border ${status.type === 'success'
                       ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
                       : 'bg-red-50 text-red-800 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800'
-                  }`}
+                    }`}
                 >
                   {status.type === 'success' ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />

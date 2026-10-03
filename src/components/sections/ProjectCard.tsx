@@ -33,7 +33,7 @@ const ProjectCard = ({
       <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-700">
         <Image
           src={projectImg}
-          alt={title}
+          alt={`Preview proyek ${title} oleh Goldie Gladwin`}
           width={400}
           height={400}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"

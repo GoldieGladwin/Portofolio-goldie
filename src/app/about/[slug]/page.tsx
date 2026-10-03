@@ -1,13 +1,26 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-import Image from 'next/image'
-import Link from 'next/link'
-import SectionHeading from '@/components/common/SectionHeading'
-import { cn } from '@/lib/utils'
-import { favoriteActivities, goals, learningNow } from '@/lib/constants'
-import About from '@/components/sections/About'
-import { ArrowLeft } from 'lucide-react'
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import SectionHeading from '@/components/common/SectionHeading';
+import { cn } from '@/lib/utils';
+import { favoriteActivities, goals, learningNow } from '@/lib/constants';
+import About from '@/components/sections/About';
+import { ArrowLeft } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Tentang Saya & Aktivitas',
+  description:
+    'Profil lengkap, hobi, aktivitas favorit, serta tujuan karir Goldie Gladwin sebagai Software Engineering Student & Full Stack Web Developer.',
+  openGraph: {
+    title: 'Tentang Saya & Aktivitas | Goldie Gladwin',
+    description:
+      'Profil lengkap, hobi, aktivitas favorit, serta tujuan karir Goldie Gladwin sebagai Software Engineering Student & Full Stack Web Developer.',
+    type: 'profile',
+  },
+};
 
 export default function AboutDetailPage() {
   return (

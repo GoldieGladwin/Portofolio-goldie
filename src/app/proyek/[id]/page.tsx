@@ -24,23 +24,51 @@ export async function generateMetadata({ params }: ProyekDetailPageProps): Promi
       .select('*')
       .eq('id', Number(id))
       .maybeSingle();
+
     if (dbItem) {
+      const ogImages = dbItem.image ? [{ url: dbItem.image }] : undefined;
       return {
-        title: `${dbItem.judul} | Detail Proyek`,
+        title: dbItem.judul,
         description: dbItem.deskripsi,
+        openGraph: {
+          title: `${dbItem.judul} | Portofolio Goldie Gladwin`,
+          description: dbItem.deskripsi,
+          type: 'article',
+          images: ogImages,
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: dbItem.judul,
+          description: dbItem.deskripsi,
+          images: ogImages,
+        },
       };
     }
   }
 
   if (!project) {
     return {
-      title: 'Proyek Tidak Ditemukan | Portfolio',
+      title: 'Proyek Tidak Ditemukan',
+      description: 'Detail proyek yang Anda cari tidak dapat ditemukan.',
     };
   }
 
+  const ogImages = project.image ? [{ url: project.image }] : undefined;
   return {
-    title: `${project.title} | Detail Proyek`,
+    title: project.title,
     description: project.description,
+    openGraph: {
+      title: `${project.title} | Portofolio Goldie Gladwin`,
+      description: project.description,
+      type: 'article',
+      images: ogImages,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.title,
+      description: project.description,
+      images: ogImages,
+    },
   };
 }
 
@@ -136,7 +164,7 @@ export default async function ProyekDetailPage({ params }: ProyekDetailPageProps
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-gray-200 shadow-md dark:border-gray-700 bg-slate-100 dark:bg-gray-700">
             <Image
               src={project.image}
-              alt={project.title}
+              alt={`Preview detail tampilan proyek ${project.title}`}
               fill
               priority
               className="object-cover"

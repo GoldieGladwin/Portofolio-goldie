@@ -143,23 +143,20 @@ export default function SplashScreen() {
     >
       {/* 1. TIRAI ATAS PUTIH (Slides UP) */}
       <div
-        className={`fixed top-0 left-0 right-0 h-1/2 bg-white border-b border-slate-200/90 shadow-[0_15px_35px_rgba(0,0,0,0.06)] transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
-          isOpening ? '-translate-y-full' : 'translate-y-0'
-        }`}
+        className={`fixed top-0 left-0 right-0 h-1/2 bg-white border-b border-slate-200/90 shadow-[0_15px_35px_rgba(0,0,0,0.06)] transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${isOpening ? '-translate-y-full' : 'translate-y-0'
+          }`}
       />
 
       {/* 2. TIRAI BAWAH PUTIH (Slides DOWN) */}
       <div
-        className={`fixed bottom-0 left-0 right-0 h-1/2 bg-white border-t border-slate-200/90 shadow-[0_-15px_35px_rgba(0,0,0,0.06)] transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
-          isOpening ? 'translate-y-full' : 'translate-y-0'
-        }`}
+        className={`fixed bottom-0 left-0 right-0 h-1/2 bg-white border-t border-slate-200/90 shadow-[0_-15px_35px_rgba(0,0,0,0.06)] transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${isOpening ? 'translate-y-full' : 'translate-y-0'
+          }`}
       />
 
       {/* 3. KONTEN TENGAH (Logo G.G + Loading Bar + Persentase) */}
       <div
-        className={`fixed inset-0 z-[100000] flex flex-col items-center justify-center transition-all duration-300 ease-out ${
-          isOpening ? 'opacity-0 scale-90 blur-xs' : 'opacity-100 scale-100'
-        }`}
+        className={`fixed inset-0 z-[100000] flex flex-col items-center justify-center transition-all duration-300 ease-out ${isOpening ? 'opacity-0 scale-90 blur-xs' : 'opacity-100 scale-100'
+          }`}
       >
         <div className="absolute w-44 h-44 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none -z-10" />
 

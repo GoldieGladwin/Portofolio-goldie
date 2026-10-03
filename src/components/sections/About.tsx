@@ -19,10 +19,10 @@ const About = ({ showDetailLink = true }: AboutProps) => {
     <div id="about" className="py-8 sm:py-12 md:py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24">
       {/* section heading */}
       <div data-aos="fade-down" data-aos-duration="600">
-        <SectionHeading 
-          title_1="About" 
-          title_2="Me" 
-          description="Get to know me better and my journey as a developer." 
+        <SectionHeading
+          title_1="About"
+          title_2="Me"
+          description="Get to know me better and my journey as a developer."
         />
       </div>
 
@@ -111,10 +111,10 @@ const About = ({ showDetailLink = true }: AboutProps) => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
           {stats.map((stat, index) => {
             return (
-              <div 
-                key={stat.label} 
-                data-aos="zoom-in-up" 
-                data-aos-delay={index * 50} 
+              <div
+                key={stat.label}
+                data-aos="zoom-in-up"
+                data-aos-delay={index * 50}
                 data-aos-anchor-placement="top-bottom"
                 className="bg-white dark:bg-gray-800 shadow rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-6 text-center hover:scale-105 transition-transform duration-300"
               >

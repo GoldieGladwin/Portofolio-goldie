@@ -63,10 +63,10 @@ const Hero = () => {
             </Button>
           </a>
 
-          <a 
-            href={cvUrl} 
+          <a
+            href={cvUrl}
             download="Minimalis Profesional CV Surat Lamaran Kerja Resume.pdf"
-            target="_blank" 
+            target="_blank"
             rel="noopener noreferrer"
           >
             <Button data-aos="fade-up" data-aos-delay="200" size="lg" className="w-fit mx-auto sm:mx-0">

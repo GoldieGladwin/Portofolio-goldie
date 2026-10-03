@@ -6,9 +6,9 @@ import SkillCard from './SkillCard';
 const Skills = () => {
   return (
     <div id="skills" className="py-16 bg-gray-100 dark:bg-gray-950 scroll-mt-24">
-      <SectionHeading 
-        title_1="Technical" 
-        title_2="Skills" 
+      <SectionHeading
+        title_1="Technical"
+        title_2="Skills"
         description="Here are my technical abilities and expertise."
       />
 
@@ -24,10 +24,10 @@ const Skills = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {category.skills.map((skill, index) => {
                   return (
-                    <div 
-                      data-aos="zoom-in" 
-                      data-aos-delay={(index % 6) * 40} 
-                      data-aos-anchor-placement="top-bottom" 
+                    <div
+                      data-aos="zoom-in"
+                      data-aos-delay={(index % 6) * 40}
+                      data-aos-anchor-placement="top-bottom"
                       key={index}
                     >
                       <SkillCard name={skill.name} icon={skill.icon} />

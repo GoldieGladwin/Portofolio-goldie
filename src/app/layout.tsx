@@ -13,9 +13,68 @@ const font = Inter({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://goldi.my.id";
+
 export const metadata: Metadata = {
-  title: "Goldie Gladwin | Portfolio",
-  description: "Personal portfolio website of Goldie Gladwin - Full Stack Developer & Software Engineering Student.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Goldie Gladwin | Portfolio & Full Stack Developer",
+    template: "%s | Goldie Gladwin",
+  },
+  description:
+    "Portofolio resmi Goldie Gladwin, siswa SMK Rekayasa Perangkat Lunak (RPL) & Full Stack Web Developer. Menampilkan proyek aplikasi web Next.js, React, Tailwind CSS, dan integrasi database Supabase.",
+  keywords: [
+    "Goldie Gladwin",
+    "Goldie",
+    "Portofolio Goldie Gladwin",
+    "Portfolio Web Developer",
+    "Full Stack Developer Pasuruan",
+    "Siswa SMK RPL",
+    "SMKN 1 Pasuruan",
+    "Rekayasa Perangkat Lunak",
+    "Next.js Portfolio",
+    "React Developer",
+    "Supabase Web App",
+  ],
+  authors: [{ name: "Goldie Gladwin", url: siteUrl }],
+  creator: "Goldie Gladwin",
+  publisher: "Goldie Gladwin",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    title: "Goldie Gladwin | Portfolio & Full Stack Developer",
+    description:
+      "Portofolio resmi siswa SMK Rekayasa Perangkat Lunak (RPL) & Full Stack Developer, dibangun dengan Next.js dan Supabase. Jelajahi karya dan proyek aplikasi web saya.",
+    url: siteUrl,
+    siteName: "Portofolio Goldie Gladwin",
+    images: [
+      {
+        url: "/images/og-image.jpg", // Banner resmi di public/images/og-image.jpg
+        width: 1024,                 // Lebar piksel banner Anda
+        height: 571,                 // Tinggi piksel banner Anda
+        alt: "Goldie Gladwin - Full Stack Developer",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Goldie Gladwin | Portfolio & Full Stack Developer",
+    description:
+      "Portofolio siswa SMK Rekayasa Perangkat Lunak, dibangun dengan Next.js dan Supabase.",
+    images: ["/images/og-image.jpg"],
+    creator: "@goldiegladwin",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

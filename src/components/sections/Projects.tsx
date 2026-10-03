@@ -60,7 +60,7 @@ const Projects = () => {
   }, []);
 
   return (
-    <div 
+    <div
       id="projects"
       className="py-16 bg-gray-100 dark:bg-gray-900 scroll-mt-24"
     >
@@ -74,7 +74,7 @@ const Projects = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-[80%] mx-auto">
         {projectList.map((project, index) => {
           return (
-            <div 
+            <div
               key={project.id || index}
               data-aos="fade-up"
               data-aos-delay={Math.min(index * 70, 200)}

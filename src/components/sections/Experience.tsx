@@ -42,9 +42,9 @@ const Experience = () => {
             technologies:
               typeof item.teknologi === 'string'
                 ? item.teknologi
-                    .split(',')
-                    .map((t: string) => t.trim())
-                    .filter(Boolean)
+                  .split(',')
+                  .map((t: string) => t.trim())
+                  .filter(Boolean)
                 : [],
           }))
         );
@@ -73,9 +73,8 @@ const Experience = () => {
               data-aos-delay={Math.min(index * 60, 150)}
               data-aos-anchor-placement="top-bottom"
               key={item.id ?? index}
-              className={`relative flex flex-col md:flex-row gap-8 mb-12 ${
-                index % 2 === 0 ? 'md:flex-row-reverse' : ''
-              }`}
+              className={`relative flex flex-col md:flex-row gap-8 mb-12 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''
+                }`}
             >
               {/* timeline node */}
               <div className="absolute left-4 md:left-1/2 w-8 h-8 -translate-x-1/2 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center z-10 shadow-xs">

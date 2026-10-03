@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Navlinks } from '@/lib/constants';
+import { Navlinks, cvUrl } from '@/lib/constants';
 import Link from 'next/link';
-import { X } from 'lucide-react';
+import { Download, X } from 'lucide-react';
 
 type Props = {
   showNav: boolean;
@@ -11,38 +11,74 @@ type Props = {
 };
 
 const MobileNav = ({ showNav, closeNav }: Props) => {
-  const sidebarOpenClose = showNav ? "translate-x-0" : "translate-x-[-100%]";
-
   return (
-    <div>
-      {/* Overlay */}
+    <div
+      className={`fixed inset-0 z-50 transition-all duration-300 ${
+        showNav ? 'visible pointer-events-auto' : 'invisible pointer-events-none'
+      }`}
+    >
+      {/* Background Overlay */}
       <div
         onClick={closeNav}
-        className={`fixed ${sidebarOpenClose} inset-0 transform transition-all duration-500 z-50 bg-black opacity-70 w-full h-screen`}
+        aria-hidden="true"
+        className={`fixed inset-0 bg-black/70 backdrop-blur-xs transition-opacity duration-300 ${
+          showNav ? 'opacity-100' : 'opacity-0'
+        }`}
       />
 
-      {/* Nav Links */}
+      {/* Nav Links Sidebar Panel */}
       <div
-        className={`text-white ${sidebarOpenClose} fixed justify-center flex flex-col h-full transform transition-all duration-500 delay-300 w-[80%] sm:w-[60%] bg-indigo-900 space-y-6 z-50`}
+        className={`fixed top-0 left-0 bottom-0 h-full w-[80%] max-w-sm sm:w-[65%] bg-indigo-950 dark:bg-slate-950 text-white z-50 flex flex-col justify-center px-8 sm:px-12 space-y-5 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+          showNav ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
-        {Navlinks.map((link) => {
-          return (
-            <Link key={link.name} href={link.href} onClick={closeNav}>
-              <p className="nav__link text-[20px] ml-12 border-b-[1.5px] pb-1 border-white sm:text-[30px]">
-                {link.name}
-              </p>
-            </Link>
-          );
-        })}
-
         {/* Close Button */}
-        <X
+        <button
+          type="button"
           onClick={closeNav}
-          className="absolute top-[0.7rem] right-[1.4rem] sm:w-8 sm:h-8 w-6 h-6 text-white cursor-pointer"
-        />
+          aria-label="Tutup Navigasi"
+          className="absolute top-5 right-5 p-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+        >
+          <X className="w-6 h-6 sm:w-7 sm:h-7" />
+        </button>
+
+        {/* Links */}
+        <div className="flex flex-col space-y-3.5">
+          {Navlinks.map((link) => {
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={closeNav}
+                className="group flex items-center justify-between border-b border-white/15 pb-2 text-lg sm:text-2xl font-medium tracking-wide text-white hover:text-indigo-300 transition-colors"
+              >
+                <span>{link.name}</span>
+                <span className="text-xs text-white/40 group-hover:text-indigo-300 group-hover:translate-x-1 transition-all">
+                  &rarr;
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Download CV Button for Mobile */}
+        <div className="pt-3">
+          <a
+            href={cvUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Minimalis Profesional CV Surat Lamaran Kerja Resume.pdf"
+            onClick={closeNav}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white py-2.5 px-4 text-sm font-semibold shadow-md transition-all active:scale-95"
+          >
+            <Download className="w-4 h-4" />
+            Download CV
+          </a>
+        </div>
       </div>
     </div>
   );
 };
 
 export default MobileNav;
+

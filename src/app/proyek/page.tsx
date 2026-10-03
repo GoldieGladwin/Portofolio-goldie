@@ -1,8 +1,21 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { projects as fallbackProjects } from '@/lib/constants';
 import { ArrowLeft, ExternalLink, Filter, Sparkles } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
+
+export const metadata: Metadata = {
+  title: 'Katalog Proyek & Portofolio',
+  description:
+    'Daftar lengkap proyek aplikasi web yang dibangun oleh Goldie Gladwin menggunakan Next.js, React, Tailwind CSS, dan Supabase.',
+  openGraph: {
+    title: 'Katalog Proyek & Portofolio | Goldie Gladwin',
+    description:
+      'Daftar lengkap proyek aplikasi web yang dibangun oleh Goldie Gladwin menggunakan Next.js, React, Tailwind CSS, dan Supabase.',
+    type: 'website',
+  },
+};
 
 // Standar Modul Pertemuan 02 (Step 6: searchParams) & Modul 03 (Step 10: Integrasi Supabase)
 interface ProyekPageProps {
@@ -91,8 +104,8 @@ export default async function ProyekPage({ searchParams }: ProyekPageProps) {
                 key={cat}
                 href={href}
                 className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${isActive
-                    ? 'bg-indigo-600 text-white shadow-md scale-105'
-                    : 'bg-white text-slate-600 dark:bg-gray-800 dark:text-gray-300 border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-700'
+                  ? 'bg-indigo-600 text-white shadow-md scale-105'
+                  : 'bg-white text-slate-600 dark:bg-gray-800 dark:text-gray-300 border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-700'
                   }`}
               >
                 {cat}
@@ -112,7 +125,7 @@ export default async function ProyekPage({ searchParams }: ProyekPageProps) {
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-gray-100 dark:border-gray-700 bg-slate-100 dark:bg-gray-700">
                   <Image
                     src={item.image}
-                    alt={item.title}
+                    alt={`Tangkapan layar proyek ${item.title}`}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 33vw"

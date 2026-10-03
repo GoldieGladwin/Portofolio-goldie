@@ -161,6 +161,7 @@
   from {
     transform: rotate(360deg);
   }
+
   to {
     transform: rotate(0deg);
   }
@@ -171,10 +172,13 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.45;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.06);
@@ -189,6 +193,7 @@
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -208,5 +213,3 @@ body:has([data-page="admin-login"]) #portfolio-navbar,
 body:has([data-page="admin-login"]) .portfolio-navbar {
   display: none !important;
 }
-
-

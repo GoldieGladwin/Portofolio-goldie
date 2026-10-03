@@ -6,6 +6,7 @@ import ProjectCard from './ProjectCard';
 import Link from 'next/link';
 import { Filter } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
+import { projects as initialStaticProjects } from '@/lib/constants';
 
 interface ProjectItem {
   id: string;
@@ -23,36 +24,57 @@ interface ProjectItem {
   demoUrl: string;
 }
 
+const defaultProjects: ProjectItem[] = initialStaticProjects.map((item) => ({
+  id: String(item.id),
+  slug: String(item.slug || item.id),
+  title: item.title,
+  category: item.category || 'Web',
+  kategori: item.kategori || 'Web',
+  role: item.role || 'Full Stack Developer',
+  description: item.description,
+  longDescription: item.longDescription || item.description,
+  keyFeatures: item.keyFeatures || [],
+  image: item.image || '/images/managemens.png',
+  techStack: item.techStack || [],
+  githubUrl: item.githubUrl || '',
+  demoUrl: item.demoUrl || '',
+}));
+
 const Projects = () => {
-  const [projectList, setProjectList] = useState<ProjectItem[]>([]);
+  // Inisialisasi langsung dengan defaultProjects agar ruang halaman langsung siap (0 CLS, 0 jeda LCP)
+  const [projectList, setProjectList] = useState<ProjectItem[]>(defaultProjects);
 
   useEffect(() => {
     async function fetchSupabaseProjects() {
-      const { data } = await supabase
-        .from('proyek')
-        .select('*')
-        .order('id', { ascending: true });
+      try {
+        const { data } = await supabase
+          .from('proyek')
+          .select('*')
+          .order('id', { ascending: true });
 
-      if (data && data.length > 0) {
-        setProjectList(
-          data.map((item) => ({
-            id: String(item.id),
-            slug: String(item.id),
-            title: item.judul,
-            category: item.kategori || 'Web',
-            kategori: item.kategori || 'Web',
-            role: item.role || 'Full Stack Developer',
-            description: item.deskripsi,
-            longDescription: item.deskripsi,
-            keyFeatures: [],
-            image: item.image || '/images/managemens.png',
-            techStack: typeof item.teknologi === 'string'
-              ? item.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
-              : [],
-            githubUrl: item.link || '',
-            demoUrl: item.link_deploy || item.demo_url || '',
-          }))
-        );
+        if (data && data.length > 0) {
+          setProjectList(
+            data.map((item) => ({
+              id: String(item.id),
+              slug: String(item.id),
+              title: item.judul,
+              category: item.kategori || 'Web',
+              kategori: item.kategori || 'Web',
+              role: item.role || 'Full Stack Developer',
+              description: item.deskripsi,
+              longDescription: item.deskripsi,
+              keyFeatures: [],
+              image: item.image || '/images/managemens.png',
+              techStack: typeof item.teknologi === 'string'
+                ? item.teknologi.split(',').map((t: string) => t.trim()).filter(Boolean)
+                : [],
+              githubUrl: item.link || '',
+              demoUrl: item.link_deploy || item.demo_url || '',
+            }))
+          );
+        }
+      } catch (err) {
+        console.error('Info: menggunakan fallback proyek statis:', err);
       }
     }
 

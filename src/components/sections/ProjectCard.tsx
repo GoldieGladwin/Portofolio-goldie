@@ -35,7 +35,8 @@ const ProjectCard = ({
           src={projectImg}
           alt={`Preview proyek ${title} oleh Goldie Gladwin`}
           width={400}
-          height={400}
+          height={240}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>

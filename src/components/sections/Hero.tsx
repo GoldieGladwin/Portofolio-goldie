@@ -15,15 +15,15 @@ const Hero = () => {
       {/* content */}
       <div className="relative z-10 text-center">
         {/* subtitle */}
-        <div data-aos="fade-up" className="sm:mb-6">
+        <div className="sm:mb-6">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-600 text-sm text-muted-foreground dark:text-gray-200 mb-8 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-green-500"></span>
             Available for Opportunities
           </span>
         </div>
 
-        {/* title */}
-        <h1 data-aos="fade-up" data-aos-delay="50" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+        {/* title (Langsung tampil instan tanpa jeda AOS untuk LCP hijau maksimal) */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
           Hi, I&apos;m{' '}
           <span className="text-indigo-800 dark:text-yellow-300">
             {aboutMe.nickname || aboutMe.name || "Goldie"}

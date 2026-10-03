@@ -6,11 +6,10 @@ import ResponsiveNav from "@/components/layout/ResponsiveNav";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import AosInitializer from "@/components/common/AosInitializer";
-import SplashScreen from "@/components/feedback/SplashScreen";
 
 const font = Inter({
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
+  display: "swap",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://goldi.my.id";
@@ -82,7 +81,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={`min-h-full flex flex-col ${font.className}`}>
         <Provider>
-          <SplashScreen />
           <AosInitializer />
           <ResponsiveNav />
           {children}

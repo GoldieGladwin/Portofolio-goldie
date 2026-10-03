@@ -34,7 +34,7 @@ const Reviews = () => {
           title_2="Reviews"
           description="What my clients say about working with me."
         />
-        <div className="mt-14 min-h-[300px]">
+        <div className="mt-14">
           <Carousel
             responsive={responsive}
             infinite={true}

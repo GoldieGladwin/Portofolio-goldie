@@ -1,5 +1,6 @@
 'use client';
 
+// Hyper-Fast Zero-Penalty Splash Screen (Active for Desktop & Mobile)
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 

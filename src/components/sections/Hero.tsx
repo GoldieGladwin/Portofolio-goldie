@@ -31,7 +31,7 @@ const Hero = () => {
         </h1>
 
         {/* typewrite effects */}
-        <div data-aos="fade-up" data-aos-delay="100" className="text-xl sm:text-2xl md:text-3xl text-black dark:text-white font-semibold mb-4 sm:mb-8 h-12">
+        <div className="text-xl sm:text-2xl md:text-3xl text-black dark:text-white font-semibold mb-4 sm:mb-8 h-12">
           <TypeAnimation
             sequence={[
               "Full Stack Developer",
@@ -49,7 +49,7 @@ const Hero = () => {
         </div>
 
         {/* description */}
-        <p data-aos="fade-up" data-aos-delay="150" className="text-lg text-muted-foreground dark:text-gray-200 max-w-2xl mx-auto mb-10 px-4">
+        <p className="text-lg text-muted-foreground dark:text-gray-200 max-w-2xl mx-auto mb-10 px-4">
           Building modern digital experiences with creative solutions and modern technologies.
           Passionate about developing applications, solving technical challenges, and continuously learning.
         </p>

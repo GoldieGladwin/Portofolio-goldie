@@ -97,6 +97,7 @@ const About = ({ showDetailLink = true }: AboutProps) => {
                     src="/images/Gold.jpg"
                     alt="Foto Profil Siswa Goldie Gladwin"
                     fill
+                    priority
                     className="object-cover object-top transition-transform duration-500 group-hover:scale-103"
                     sizes="(max-width: 640px) 340px, 420px"
                   />

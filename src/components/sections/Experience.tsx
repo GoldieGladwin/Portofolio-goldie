@@ -15,61 +15,8 @@ interface ExperienceItem {
   technologies: string[];
 }
 
-const defaultExperiences: ExperienceItem[] = [
-  {
-    id: 1,
-    type: 'work',
-    title: 'Full Stack Web Developer',
-    company: 'Independent Projects',
-    period: '2025 - Present',
-    description:
-      'Architecting and building responsive web applications from the ground up, emphasizing modern UX, optimized rendering, and modular architecture.',
-    technologies: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript'],
-  },
-  {
-    id: 2,
-    type: 'project',
-    title: 'Student Management System',
-    company: 'Academic Project',
-    period: '2025',
-    description:
-      'Engineered an administrative school portal to centralize, record, and evaluate student academic performance efficiently.',
-    technologies: ['Next.js', 'Tailwind CSS', 'Shadcn UI', 'Supabase'],
-  },
-  {
-    id: 3,
-    type: 'project',
-    title: 'Internship Management System',
-    company: 'Academic Project',
-    period: '2025',
-    description:
-      'Created a unified internship management platform streamlining communication between vocational students, teachers, and industrial partners.',
-    technologies: ['Next.js', 'Tailwind CSS', 'Shadcn UI', 'Supabase'],
-  },
-  {
-    id: 4,
-    type: 'project',
-    title: 'Game Account Rental Platform',
-    company: 'Independent Project',
-    period: '2025',
-    description:
-      'Designed a modern web application for game account rentals with clean responsive UI and secure booking workflows.',
-    technologies: ['Next.js', 'Tailwind CSS', 'Shadcn UI', 'Supabase'],
-  },
-  {
-    id: 5,
-    type: 'education',
-    title: 'Software Engineering Student',
-    company: 'SMKN 1 Pasuruan',
-    period: '2025 - Present',
-    description:
-      'Studying software engineering fundamentals, full-stack web development, database design, and algorithmic problem-solving.',
-    technologies: ['HTML', 'CSS', 'JavaScript', 'React', 'Next.js'],
-  },
-];
-
 const Experience = () => {
-  const [experienceList, setExperienceList] = useState<ExperienceItem[]>(defaultExperiences);
+  const [experienceList, setExperienceList] = useState<ExperienceItem[]>([]);
 
   useEffect(() => {
     async function fetchSupabaseExperiences() {

@@ -41,7 +41,6 @@ const Reviews = () => {
             autoPlay={true}
             autoPlaySpeed={5000}
             arrows={true}
-            ssr={true}
           >
             {userReviewData.map((user) => {
               return (
